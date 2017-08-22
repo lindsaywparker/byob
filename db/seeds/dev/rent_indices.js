@@ -1,21 +1,41 @@
 exports.seed = function (knex, Promise) {
-  // Deletes ALL existing entries
   return knex('neighborhood').del()
     .then(() => knex('zipcode').del())
     .then(() => knex('city').del())
     .then(() => knex('metro').del())
     .then(() => knex('state').del())
     .then(() => knex('state').insert(states, '*'))
-    .then(data => Promise.all(
+    .then(data => knex('metro').insert(
       metros.map((metro) => {
         metro.state_id = data.find(state => state.abbr === metro.state).id;
-        return knex('metro').insert(metro);
-      })
-    ))
+        return metro;
+      }), '*'))
+    .then(data => knex('city').insert(
+      cities.map((city) => {
+        city.state_id = data.find(metro => metro.name === `${city.metro}, ${city.state}`).state_id;
+        city.metro_id = data.find(metro => metro.name === `${city.metro}, ${city.state}`).id;
+        return city;
+      }), '*'))
+    .then(data => Promise.all([
+      knex('neighborhood').insert(
+        neighborhoods.map((neighborhood) => {
+          neighborhood.state_id = data.find(city => city.name === neighborhood.city).state_id;
+          neighborhood.metro_id = data.find(city => city.name === neighborhood.city).metro_id;
+          neighborhood.city_id = data.find(city => city.name === neighborhood.city).id;
+          return neighborhood;
+        })),
+      knex('zipcode').insert(
+        zipcodes.map((zipcode) => {
+          zipcode.state_id = data.find(city => city.name === zipcode.city).state_id;
+          zipcode.metro_id = data.find(city => city.name === zipcode.city).metro_id;
+          zipcode.city_id = data.find(city => city.name === zipcode.city).id;
+          return zipcode;
+        })),
+    ]));
 };
 
 
- const states = [
+const states = [
   {
     collected_on: '2017-06-30',
     name: 'California',
@@ -24,7 +44,7 @@ exports.seed = function (knex, Promise) {
     monthly_change: 0.00287947346770876,
     quarterly_change: 0.0107794361525705,
     yearly_change: 0.0370055295618886,
-    abbr: 'CA'
+    abbr: 'CA',
   },
   {
     collected_on: '2017-06-30',
@@ -34,7 +54,7 @@ exports.seed = function (knex, Promise) {
     monthly_change: 0.00283486888731396,
     quarterly_change: 0.00354609929078014,
     yearly_change: -0.00211565585331453,
-    abbr: 'TX'
+    abbr: 'TX',
   },
   {
     collected_on: '2017-06-30',
@@ -556,7 +576,7 @@ exports.seed = function (knex, Promise) {
   },
 ];
 
- const metros = [
+const metros = [
   {
     collected_on: '2017-06-30',
     name: 'New York, NY',
@@ -609,7 +629,7 @@ exports.seed = function (knex, Promise) {
   },
 ];
 
- const cities = [
+const cities = [
   {
     collected_on: '2017-06-30',
     name: 'New York',
@@ -828,7 +848,7 @@ exports.seed = function (knex, Promise) {
   },
 ];
 
- const neighborhoods = [
+const neighborhoods = [
   {
     collected_on: '2017-06-30',
     name: 'Upper West Side',
@@ -935,14 +955,14 @@ exports.seed = function (knex, Promise) {
   },
 ];
 
- const zipcodes = [
+const zipcodes = [
   {
     collected_on: '2017-06-30',
-    name: 08030,
+    name: '08030',
     state: 'NJ',
     metro: 'Philadelphia',
     county: 'Camden',
-    city: 'Gloucester city',
+    city: 'Philadelphia',
     size_rank: 7948,
     median_rent: 1357,
     monthly_change: -0.0166666666666667,
@@ -951,7 +971,7 @@ exports.seed = function (knex, Promise) {
   },
   {
     collected_on: '2017-06-30',
-    name: 10025,
+    name: '10025',
     state: 'NY',
     metro: 'New York',
     county: 'New York',
@@ -964,7 +984,7 @@ exports.seed = function (knex, Promise) {
   },
   {
     collected_on: '2017-06-30',
-    name: 11375,
+    name: '11375',
     state: 'NY',
     metro: 'New York',
     county: 'Queens',
@@ -977,11 +997,11 @@ exports.seed = function (knex, Promise) {
   },
   {
     collected_on: '2017-06-30',
-    name: 75070,
+    name: '75070',
     state: 'TX',
     metro: 'Dallas-Fort Worth',
     county: 'Collin',
-    city: 'McKinney',
+    city: 'Dallas',
     size_rank: 10,
     median_rent: 1928,
     monthly_change: 0.000518941359626362,
@@ -990,11 +1010,11 @@ exports.seed = function (knex, Promise) {
   },
   {
     collected_on: '2017-06-30',
-    name: 90250,
+    name: '90250',
     state: 'CA',
     metro: 'Los Angeles-Long Beach-Anaheim',
     county: 'Los Angeles',
-    city: 'Hawthorne',
+    city: 'Los Angeles',
     size_rank: 19,
     median_rent: 2566,
     monthly_change: 0.00666928207140055,
@@ -1003,7 +1023,7 @@ exports.seed = function (knex, Promise) {
   },
   {
     collected_on: '2017-06-30',
-    name: 60657,
+    name: '60657',
     state: 'IL',
     metro: 'Chicago',
     county: 'Cook',
