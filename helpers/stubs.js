@@ -851,7 +851,7 @@ export const neighborhoods = [
 export const zipcodes = [
   {
     Date: '2017-06-30',
-    RegionName: 8030,
+    RegionName: 08030,
     State: 'NJ',
     Metro: 'Philadelphia',
     County: 'Camden',
