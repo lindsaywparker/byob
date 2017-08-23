@@ -5,33 +5,31 @@ const db = require('knex')(configuration);
 const helpers = require('./helpers/getIds');
 
 const getRegionData = (request, response) => {
-  const regionType = request.params.regionType;
-  const tableList = ['state', 'metro', 'city', 'neighborhood', 'zipcode'];
-  if (tableList.indexOf(regionType) < 0) {
-    response.status(404).json({ error: 'Table not found' });
-  }
+  const { regionType } = request.params;
 
   db(regionType).select()
     .then((data) => {
       response.status(200).json(data);
     })
     .catch((err) => {
+      if (err.code === '42P01') {
+        response.status(404).json({ err: 'Table not found' });
+      }
       response.status(500).json(err);
     });
 };
 
 const getSpecificRegionData = (request, response) => {
-  const id = request.params.id;
-  const regionType = request.params.regionType;
-  const tableList = ['state', 'metro', 'city', 'neighborhood', 'zipcode'];
-  if (tableList.indexOf(regionType) < 0) {
-    response.status(404).json({ error: 'Table not found' });
-  }
+  const { id, regionType } = request.params;
+
   db(regionType).where('id', id).select()
     .then((data) => {
       response.status(200).json(data);
     })
     .catch((err) => {
+      if (err.code === '42P01') {
+        response.status(404).json({ err: 'Table not found' });
+      }
       response.status(500).json(err);
     });
 };
@@ -83,21 +81,34 @@ const updateRegionData = (request, response) => {
 };
 
 const updateSpecificRegionData = (request, response) => {
-  // LINDSAY
-  // 404
-  // validate adequate request inputs, status 422 (unprocessable entity) if inadequate
-  //   >> id & whichever field they're updating?? at least one??
-  // modify specific data
-  // status 204 if successful
-  // status 500 if unsuccessful
+  const { regionType, id } = request.params;
+  const updates = request.body;
+
+  db(regionType).where('id', id).update(updates)
+    .then((result) => {
+      response.status(200).json({ result });
+    })
+    .catch((err) => {
+      if (err.code === '42P01') {
+        response.status(404).json({ err: 'Table not found' });
+      }
+      response.status(500).json({ err });
+    });
 };
 
 const deleteRegionData = (request, response) => {
-  // LINDSAY
-  // 404
-  // delete all region data
-  // status 200 if successful
-  // status 500 if unsuccessful
+  const { regionType } = request.params;
+
+  db(regionType).del()
+    .then((result) => {
+      response.status(200).json({ result });
+    })
+    .catch((err) => {
+      if (err.code === '42P01') {
+        response.status(404).json({ err: 'Table not found' });
+      }
+      response.status(500).json({ err });
+    });
 };
 
 const deleteSpecificRegionData = (request, response) => {
