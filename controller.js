@@ -25,21 +25,6 @@ const getRegionData = (request, response) => {
     });
 };
 
-const getSpecificRegionData = (request, response) => {
-  const { id, regionType } = request.params;
-
-  db(regionType).where('id', id).select()
-    .then((data) => {
-      response.status(200).json(data);
-    })
-    .catch((err) => {
-      if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
-      }
-      response.status(500).json(err);
-    });
-};
-
 const addRegionData = (request, response) => {
   const { regionType } = request.params;
   if (regionType === 'zipcode' || regionType === 'neighborhood') {
@@ -133,7 +118,6 @@ const deleteSpecificRegionData = (request, response) => {
 
 module.exports = {
   getRegionData,
-  getSpecificRegionData,
   addRegionData,
   updateRegionData,
   updateSpecificRegionData,
