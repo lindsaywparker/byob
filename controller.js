@@ -6,8 +6,14 @@ const helpers = require('./helpers/getIds');
 
 const getRegionData = (request, response) => {
   const { regionType } = request.params;
+  const requestObj = request.query;
 
   db(regionType).select()
+    .modify((query) => {
+      if (Object.keys(requestObj).length) {
+        query.where(requestObj);
+      }
+    })
     .then((data) => {
       response.status(200).json(data);
     })
