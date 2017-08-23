@@ -18,10 +18,10 @@ module.exports = {
     client: 'pg',
     connection: process.env.DATABASE_URL || 'postgres://localhost/byobtest',
     migrations: {
-      directory: './db/migrations',
+      directory: './db/test/migrations',
     },
     seeds: {
-      directory: './db/seeds/dev',
+      directory: './db/seeds/test',
     },
     useNullAsDefault: true,
   },
