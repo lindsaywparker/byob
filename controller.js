@@ -8,6 +8,7 @@ const getRegionData = (request, response) => {
   if (tableList.indexOf(regionType) < 0) {
     response.status(404).json({ error: 'Table not found' });
   }
+
   db(regionType).select()
     .then((data) => {
       response.status(200).json(data);
@@ -33,7 +34,58 @@ const getSpecificRegionData = (request, response) => {
     });
 };
 
+const addRegionData = (request, response) => {
+  // GEORGE
+  // 404
+  // validate adequate request inputs, status 422 (unprocessable entity) if inadequate
+  // insert new data for a regionType
+  // status 201 if successful, return id
+  // status 500 if unsuccessful
+};
+
+const updateRegionData = (request, response) => {
+  // GEORGE
+  // 404
+  // validate adequate request inputs, status 422 (unprocessable entity) if inadequate
+  //   >> id & whichever field they're updating??
+  // modify all the data
+  // status 204 if successful
+  // status 500 if unsuccessful
+};
+
+const updateSpecificRegionData = (request, response) => {
+  // LINDSAY
+  // 404
+  // validate adequate request inputs, status 422 (unprocessable entity) if inadequate
+  //   >> id & whichever field they're updating?? at least one??
+  // modify specific data
+  // status 204 if successful
+  // status 500 if unsuccessful
+};
+
+const deleteRegionData = (request, response) => {
+  // LINDSAY
+  // 404
+  // delete all region data
+  // status 200 if successful
+  // status 500 if unsuccessful
+};
+
+const deleteSpecificRegionData = (request, response) => {
+  // GEORGE
+  // 404
+  // delete specific data
+  // status 200 if successful
+  // status 500 if unsuccessful
+};
+
+
 module.exports = {
   getRegionData,
   getSpecificRegionData,
+  addRegionData,
+  updateRegionData,
+  updateSpecificRegionData,
+  deleteRegionData,
+  deleteSpecificRegionData,
 };
