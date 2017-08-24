@@ -8,6 +8,7 @@ router.get('/v1/:regionType', controller.getRegionData);
 router.post('/v1/:regionType', controller.addRegionData);
 // router.post('/v1/users/add', controller.addUser);
 // router.post('/v1/users', controller.login);
+router.post('/requestjwt', controller.generateJWT);
 
 router.put('/v1/:regionType', controller.updateRegionData);
 router.put('/v1/:regionType/:id', controller.updateSpecificRegionData);
