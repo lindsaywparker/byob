@@ -22,7 +22,7 @@ describe('API Routes', () => {
   });
 
   describe('GET /v1/:regionType', () => {
-    it(':) should return all entries for specified region type', (done) => {
+    it.skip(':) should return all entries for specified region type', (done) => {
       // GEORGE
       chai.request(server)
         .get('/api/v1/state')
@@ -32,13 +32,45 @@ describe('API Routes', () => {
         });
     });
 
-    it.skip(':) should return filtered entries for region type with provided query parameters', (done) => {
-      // LINDSAY
+    it(':) should return filtered entries for region type with provided query parameters', (done) => {
       chai.request(server)
         .get('/api/v1/city?state=NY')
         .end((err, response) => {
-          // test all the things!
-          // also test if query parameters don't match anything, a la Juan.
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('metro_id');
+          response.body[0].should.have.property('state_id');
+          response.body[0].should.have.property('collected_on');
+          response.body[0].should.have.property('median_rent');
+          response.body[0].should.have.property('monthly_change');
+          response.body[0].should.have.property('quarterly_change');
+          response.body[0].should.have.property('yearly_change');
+          response.body[0].should.have.property('size_rank');
+          response.body[0].should.have.property('state');
+          response.body[0].should.have.property('metro');
+          response.body[0].should.have.property('county');
+          response.body[0].should.have.property('created_at');
+          response.body[0].should.have.property('updated_at');
+          response.body[0].name.should.equal('New York');
+          response.body[1].name.should.equal('Yonkers');
+          response.body[0].state.should.equal('NY');
+          response.body[1].state.should.equal('NY');
+          done();
+        });
+    });
+
+    it(':) should return no entries if the provided query parameters do not match any records', (done) => {
+      chai.request(server)
+        .get('/api/v1/city?state=XX')
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.err.should.equal('No matching entries');
           done();
         });
     });
@@ -95,21 +127,76 @@ describe('API Routes', () => {
 
   describe('PUT /v1/:regionType', () => {
     // LINDSAY
-    it.skip(':) should update all matching provided entries in the associated region table', (done) => {
+    it(':) should update all matching provided entries in the associated region table', (done) => {
+      const updates = {
+        data: [
+          {
+            name: 'Upper West Side',
+            median_rent: 3999,
+            size_rank: 2,
+          },
+          {
+            name: 'Sherman Oaks',
+            median_rent: 3499,
+            size_rank: 5,
+          },
+        ],
+      };
+
       chai.request(server)
         .put('/api/v1/neighborhood')
+        .send(updates)
         .end((err, response) => {
-          // test all the things!
+          response.should.have.status(200);
+          response.should.be.json;
+          // issue with results being a nested array....
+          response.body.results[0].should.be.a('array');
+          response.body.results[0].should.have.property('id');
+          response.body.results[0].should.have.property('name');
+          response.body.results[0].should.have.property('metro_id');
+          response.body.results[0].should.have.property('state_id');
+          response.body.results[0].should.have.property('city_id');
+          response.body.results[0].should.have.property('collected_on');
+          response.body.results[0].should.have.property('median_rent');
+          response.body.results[0].should.have.property('monthly_change');
+          response.body.results[0].should.have.property('quarterly_change');
+          response.body.results[0].should.have.property('yearly_change');
+          response.body.results[0].should.have.property('size_rank');
+          response.body.results[0].should.have.property('state');
+          response.body.results[0].should.have.property('metro');
+          response.body.results[0].should.have.property('county');
+          response.body.results[0].should.have.property('city');
+          response.body.results[0].should.have.property('created_at');
+          response.body.results[0].should.have.property('updated_at');
           // should skip over unmatched entries
           done();
         });
     });
 
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
+    it(':( should return a clear error message if entry is unprocessable', (done) => {
+      const updates = {
+        data: [
+          {
+            name: 'West Side',
+            median_rent: 3999,
+            size_rank: 2,
+          },
+          {
+            name: 'Sherman Maples',
+            median_rent: 3499,
+            size_rank: 5,
+          },
+        ],
+      };
+
       chai.request(server)
-        .put('/api/v1/neighborhood')
+        .put('/api/v1/neighborhoods')
+        .send(updates)
         .end((err, response) => {
-          // test all the things!
+          response.should.have.status(404);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.err.should.equal('Table not found');
           done();
         });
     });

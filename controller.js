@@ -15,6 +15,9 @@ const getRegionData = (request, response) => {
       }
     })
     .then((data) => {
+      if (data.length === 0) {
+        return response.status(200).json({ err: 'No matching entries' });
+      }
       response.status(200).json(data);
     })
     .catch((err) => {
@@ -65,7 +68,7 @@ const updateRegionData = (request, response) => {
       .catch(err => response.status(500).json({ err })))
     .catch((err) => {
       if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
+        return response.status(404).json({ err: 'Table not found' });
       }
       response.status(500).json({ err });
     });
