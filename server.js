@@ -2,9 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = require('./router');
-// const jwt = require('jsonwebtoken');
-//
-// const privateKey = process.env.SECRET_KEY;
 
 const app = express();
 
