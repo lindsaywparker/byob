@@ -33,3 +33,6 @@ node_modules/
 
 #JWT Secret
 .env
+
+#Data Files
+raw-data/
