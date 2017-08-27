@@ -221,11 +221,22 @@ describe('API Routes', () => {
         });
     });
 
-    it.skip(':( should not add an entry to the specified table if missing required parameters', (done) => {
+    it.only(':( should not add an entry to the specified table if missing required parameters', (done) => {
+      const newNeighb = {
+        id: 6,
+        name: 'Illadelphia',
+        metro_id: 5,
+        state_id: 6,
+        city_id: 4,
+        city: 'Philadelphia',
+      };
+
       chai.request(server)
         .post('/api/v1/neighborhood')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .send(newNeighb)
         .end((err, response) => {
-          // test all the things!
+          response.body.err.code.should.equal('23502');
           done();
         });
     });
