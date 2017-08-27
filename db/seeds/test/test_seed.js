@@ -5,11 +5,11 @@ exports.seed = function (knex, Promise) {
     .then(() => knex('metro').del())
     .then(() => knex('state').del())
     .then(() => knex('state').insert(states, '*'))
-    .then(data => knex('metro').insert(
+    .then(() => knex('metro').insert(
       metros.map(metro => metro), '*'))
-    .then(data => knex('city').insert(
+    .then(() => knex('city').insert(
       cities.map(city => city), '*'))
-    .then(data => Promise.all([
+    .then(() => Promise.all([
       knex('neighborhood').insert(
         neighborhoods.map(neighborhood => neighborhood)),
       knex('zipcode').insert(

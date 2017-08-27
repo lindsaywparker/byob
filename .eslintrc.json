@@ -1,6 +1,20 @@
 {
     "extends": "airbnb-base",
     "rules": {
+      "array-callback-return": [0],
+      "consistent-return": [0],
+      "func-names": [0],
+      "no-param-reassign": [0],
+      "no-restricted-syntax": [1],
       "no-use-before-define": [0]
+    },
+    "globals": {
+      "document": false,
+      "fetch": false,
+      "describe": false,
+      "before": false,
+      "beforeEach": false,
+      "it": false,
+      "should": false
     }
 }
