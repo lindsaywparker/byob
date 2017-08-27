@@ -8,6 +8,11 @@ const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
 
+const adminToken = process.env.ADMIN_TOKEN;
+const badToken = process.env.BAD_TOKEN;
+
+console.log(adminToken, badToken, process.env.SECRET_KEY);
+
 chai.use(chaiHttp);
 
 describe('API Routes', () => {
@@ -142,7 +147,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -150,7 +155,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'BADTOKENeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', badToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(403);
@@ -184,7 +189,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', `${adminToken}`)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -288,7 +293,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(404);
@@ -311,7 +316,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -319,7 +324,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'BADTOKENeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', badToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(403);
@@ -343,7 +348,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -398,7 +403,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods/10')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.body.err.should.equal('Table not found');
@@ -411,7 +416,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .send(badUpdate)
         .end((err, response) => {
           response.body.err.should.equal('Undefined column');
@@ -446,14 +451,14 @@ describe('API Routes', () => {
     it(':) should be a secure endpoint', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/2')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.should.have.status(200);
         });
 
       chai.request(server)
         .delete('/api/v1/neighborhood/3')
-        .set('Authorization', 'BADTOKENeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', badToken)
         .end((err, response) => {
           response.should.have.status(403);
         });
@@ -470,7 +475,7 @@ describe('API Routes', () => {
     it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
@@ -490,7 +495,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/100')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;

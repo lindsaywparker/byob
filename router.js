@@ -9,7 +9,7 @@ const privateKey = process.env.SECRET_KEY;
 
 const checkAuth = (request, response, next) => {
   const token = request.get('Authorization');
-
+  console.log(token);
   if (!token) {
     return response.status(403).json({ err: 'You must be authorized to hit this endpoint' });
   }
