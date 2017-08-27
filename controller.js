@@ -107,13 +107,13 @@ const deleteRegionData = (request, response) => {
 };
 
 const deleteSpecificRegionData = (request, response) => {
-  db(request.params.id).where('id', request.params.id).del()
+  db(request.params.regionType).where('id', request.params.id).del()
     .then((result) => {
       response.status(200).json(result);
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
+        return response.status(404).json({ err: 'Table not found' });
       }
       response.status(500).json({ err });
     });
