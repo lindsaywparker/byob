@@ -21,9 +21,9 @@ BYOB uses Mocha and Chai for testing
 
 Run with `npm test`
 
-### Original Assignment - GEORGE
+### Original Assignment
 
-<!-- [Jet Fuel](http://frontend.turing.io/projects/jet-fuel.html) from the Turing School of Software & Design -->
+[BYOB](http://frontend.turing.io/projects/build-your-own-backend.html)
 
 ### Documentation
 #### Region Types
@@ -106,24 +106,81 @@ Run with `npm test`
     ```
 ---
 
-##### `POST` /api/v1/:regionType - GEORGE
-  - **Description:** type the things here?
-  - **Parameters**
-    - type the things here?
-    - type the things here?
+##### `POST` /api/v1/:regionType
+  - **Description:** Add a single location to the specified table
+  - **Parameters:** Region type to modify (only neighborhood and zipcode currently available)
+  - **Request body must contain:**
+    - name
+    - collected_on
+    - median_rent
+    - monthly_change
+    - quarterly_change
+    - yearly_change
+    - size_rank
+    - state (all except state table)
+    - abbr (state table only)
+    - metro (city, neighborhood, zipcode tables only)
+    - county (city, neighborhood, zipcode tables only)
+    - city (neighborhood, zipcode tables only)
+  - **Authorization**
+    - JWT with admin rights required
   - **Return Format:** A JSON object
   - **Errors**
-    - type the things here?
+    - **404 Table Not Found:** The region type provided does not exist, confirm intended path.
+    - **500 Server Error:** There was an error modifying the requested records, try again.
+    - **23502 Database error:** Missing required parameters
+    - **Unacceptable POST target:** Attempted to POST to a table outside of those allowed
+    - **You must be authorized to hit the endpoint:** JSON web token was either not applied or invalid
   - **Example**
     - **Request**
     ```javascript
-    console.log('hi im code');
+    POST '/api/v1/:regionType
+    body: 
+    {
+        name: 'Ping pong',
+        metro_id: 43,
+        state_id: 767,
+        city_id: 13,
+        collected_on: '2017-06-30T06:00:00.000Z',
+        median_rent: 1736,
+        monthly_change: '0.00',
+        quarterly_change: '0.00',
+        yearly_change: '0.01',
+        size_rank: 83,
+        created_at: '2017-08-22T22:38:13.668Z,
+        updated_at: 2017-08-22T22:38:13.668Z,
+        state: 'TX',
+        metro: 'Dallas-Fort Worth',
+        county: 'Dallas',
+        city: 'Dallas'
+    }
+    Authorization: 'some-valid-token'
     ```
     - **Return**
     ```javascript
     {
-      console.log('hi im code');
-    }
+    "result": [
+        {
+            "id": 10,
+            "name": "Ping pong",
+            "metro_id": 43,
+            "state_id": 767,
+            "city_id": 13,
+            "collected_on": "2017-06-30T06:00:00.000Z",
+            "median_rent": 1736,
+            "monthly_change": "0.00",
+            "quarterly_change": "0.00",
+            "yearly_change": "0.01",
+            "size_rank": 83,
+            "created_at": "2017-08-22T22:38:13.668Z",
+            "updated_at": "2017-08-22T22:38:13.668Z",
+            "state": "TX",
+            "metro": "Dallas-Fort Worth",
+            "county": "Dallas",
+            "city": "Dallas"
+        }
+    ]
+}
     ```
   
 ---
