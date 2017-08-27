@@ -93,7 +93,51 @@ describe('API Routes', () => {
 
   describe('POST /v1/:regionType', () => {
     it(':) should add an entry to the zipcode table', (done) => {
+      const newZip = {
+        id: 6,
+        name: 12345,
+        metro_id: 5,
+        state_id: 6,
+        city_id: 4,
+        collected_on: '2017-06-30',
+        median_rent: 500,
+        monthly_change: 10.10,
+        quarterly_change: 99.99,
+        yearly_change: 1.21,
+        size_rank: 999,
+        state: 'PA',
+        metro: 'Philadelphia',
+        county: 'Camden',
+        city: 'Philadelphia',
+      };
 
+      chai.request(server)
+        .post('/api/v1/zipcode')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .send(newZip)
+        .end((err, response) => {
+          response.status.should.equal(201);
+          response.should.be.json;
+          response.body.result.length.should.equal(1);
+          response.body.result[0].should.have.property('id');
+          response.body.result[0].should.have.property('name');
+          response.body.result[0].should.have.property('metro_id');
+          response.body.result[0].should.have.property('city_id');
+          response.body.result[0].should.have.property('state_id');
+          response.body.result[0].should.have.property('collected_on');
+          response.body.result[0].should.have.property('median_rent');
+          response.body.result[0].should.have.property('monthly_change');
+          response.body.result[0].should.have.property('quarterly_change');
+          response.body.result[0].should.have.property('yearly_change');
+          response.body.result[0].should.have.property('size_rank');
+          response.body.result[0].should.have.property('state');
+          response.body.result[0].should.have.property('metro');
+          response.body.result[0].should.have.property('county');
+          response.body.result[0].should.have.property('city');
+          response.body.result[0].should.have.property('created_at');
+          response.body.result[0].should.have.property('updated_at');
+          done();
+        });
     });
 
     it.skip(':) should add an entry to the neighborhood table', (done) => {
