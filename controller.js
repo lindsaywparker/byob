@@ -133,7 +133,7 @@ const generateJWT = (request, response) => {
   }
 
   const token = jwt.sign(payload, privateKey);
-  response.status(200).json({ msg: 'Request successful, see token below', token });
+  response.status(200).json({ msg: 'Request successful, use token below', token });
 };
 
 module.exports = {
