@@ -24,8 +24,9 @@ const getRegionData = (request, response) => {
     .catch((err) => {
       if (err.code === '42P01') {
         response.status(404).json({ err: 'Table not found' });
+      } else {
+        response.status(500).json(err);
       }
-      response.status(500).json(err);
     });
 };
 
@@ -37,7 +38,7 @@ const addRegionData = (request, response) => {
         const cityId = data[0].id;
         const metroId = data[0].metro_id;
         const stateId = data[0].state_id;
-        return db('zipcode').insert(Object.assign(request.body, {
+        return db(regionType).insert(Object.assign(request.body, {
           city_id: cityId,
           metro_id: metroId,
           state_id: stateId,

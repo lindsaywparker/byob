@@ -487,7 +487,7 @@ const zipcodes = [
     metro_id: 5,
     collected_on: '2017-06-30',
     name: '08030',
-    state: 'NJ',
+    state: 'PA',
     metro: 'Philadelphia',
     county: 'Camden',
     city: 'Philadelphia',
