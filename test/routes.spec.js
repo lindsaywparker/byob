@@ -187,6 +187,7 @@ describe('API Routes', () => {
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(updates)
         .end((err, response) => {
+          console.log('hi', response);
           response.should.have.status(200);
           response.should.be.json;
           response.body.results[0].should.be.a('array');
@@ -230,43 +231,43 @@ describe('API Routes', () => {
           response.body.results[2][0].metro.should.equal('Los Angeles-Long Beach-Anaheim');
           response.body.results[2][0].county.should.equal('Los Angeles');
           response.body.results[2][0].city.should.equal('Los Angeles');
-        });
 
-      chai.request(server)
-        .get('/api/v1/neighborhood?name=East+New+York')
-        .end((err, response) => {
-          response.should.have.status(200);
-          response.should.be.json;
-          response.body.should.be.a('array');
-          response.body[0].should.have.property('id');
-          response.body[0].should.have.property('name');
-          response.body[0].should.have.property('metro_id');
-          response.body[0].should.have.property('state_id');
-          response.body[0].should.have.property('city_id');
-          response.body[0].should.have.property('collected_on');
-          response.body[0].should.have.property('median_rent');
-          response.body[0].should.have.property('monthly_change');
-          response.body[0].should.have.property('quarterly_change');
-          response.body[0].should.have.property('yearly_change');
-          response.body[0].should.have.property('size_rank');
-          response.body[0].should.have.property('state');
-          response.body[0].should.have.property('metro');
-          response.body[0].should.have.property('county');
-          response.body[0].should.have.property('city');
-          response.body[0].should.have.property('created_at');
-          response.body[0].should.have.property('updated_at');
-          response.body[0].id.should.equal(4);
-          response.body[0].name.should.equal('East New York');
-          response.body[0].metro_id.should.equal(1);
-          response.body[0].state_id.should.equal(3);
-          response.body[0].city_id.should.equal(1);
-          response.body[0].median_rent.should.equal(2217);
-          response.body[0].size_rank.should.equal(8);
-          response.body[0].state.should.equal('NY');
-          response.body[0].metro.should.equal('New York');
-          response.body[0].county.should.equal('Kings');
-          response.body[0].city.should.equal('New York');
-          done();
+          chai.request(server)
+            .get('/api/v1/neighborhood?name=East+New+York')
+            .end((err, response) => {
+              response.should.have.status(200);
+              response.should.be.json;
+              response.body.should.be.a('array');
+              response.body[0].should.have.property('id');
+              response.body[0].should.have.property('name');
+              response.body[0].should.have.property('metro_id');
+              response.body[0].should.have.property('state_id');
+              response.body[0].should.have.property('city_id');
+              response.body[0].should.have.property('collected_on');
+              response.body[0].should.have.property('median_rent');
+              response.body[0].should.have.property('monthly_change');
+              response.body[0].should.have.property('quarterly_change');
+              response.body[0].should.have.property('yearly_change');
+              response.body[0].should.have.property('size_rank');
+              response.body[0].should.have.property('state');
+              response.body[0].should.have.property('metro');
+              response.body[0].should.have.property('county');
+              response.body[0].should.have.property('city');
+              response.body[0].should.have.property('created_at');
+              response.body[0].should.have.property('updated_at');
+              response.body[0].id.should.equal(4);
+              response.body[0].name.should.equal('East New York');
+              response.body[0].metro_id.should.equal(1);
+              response.body[0].state_id.should.equal(3);
+              response.body[0].city_id.should.equal(1);
+              response.body[0].median_rent.should.equal(2217);
+              response.body[0].size_rank.should.equal(8);
+              response.body[0].state.should.equal('NY');
+              response.body[0].metro.should.equal('New York');
+              response.body[0].county.should.equal('Kings');
+              response.body[0].city.should.equal('New York');
+              done();
+            });
         });
     });
 
