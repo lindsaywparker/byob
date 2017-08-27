@@ -134,7 +134,7 @@ Run with `npm test`
   - **Example**
     - **Request**
     ```javascript
-    POST '/api/v1/:regionType
+    POST '/api/v1/:regionType'
     body: 
     {
         name: 'Ping pong',
