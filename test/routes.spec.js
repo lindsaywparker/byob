@@ -221,7 +221,7 @@ describe('API Routes', () => {
         });
     });
 
-    it.only(':( should not add an entry to the specified table if missing required parameters', (done) => {
+    it(':( should not add an entry to the specified table if missing required parameters', (done) => {
       const newNeighb = {
         id: 6,
         name: 'Illadelphia',
@@ -241,11 +241,31 @@ describe('API Routes', () => {
         });
     });
 
-    it.skip(':( should return a clear error message if associated region does not exist in the database', (done) => {
+    it(':( should return a clear error message if associated region does not exist in the database', (done) => {
+      const newZip = {
+        id: 6,
+        name: 12345,
+        metro_id: 5,
+        state_id: 6,
+        city_id: 4,
+        collected_on: '2017-06-30',
+        median_rent: 500,
+        monthly_change: 10.10,
+        quarterly_change: 99.99,
+        yearly_change: 1.21,
+        size_rank: 999,
+        state: 'PA',
+        metro: 'Philadelphia',
+        county: 'Camden',
+        city: 'Philadelphia',
+      };
+
       chai.request(server)
-        .post('/api/v1/neighborhood')
+        .post('/api/v1/state')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .send(newZip)
         .end((err, response) => {
-          // test all the things!
+          response.body.err.should.equal('Unacceptable POST target');
           done();
         });
     });
