@@ -110,7 +110,7 @@ const deleteRegionData = (request, response) => {
 };
 
 const deleteSpecificRegionData = (request, response) => {
-  db(request.params.id).where('id', request.params.id).del()
+  db(request.params.regionType).where('id', request.params.id).del()
     .then((result) => {
       response.status(200).json(result);
     })
