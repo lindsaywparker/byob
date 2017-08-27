@@ -153,7 +153,13 @@ describe('API Routes', () => {
           response.body.result[0].metro.should.equal('Philadelphia');
           response.body.result[0].county.should.equal('Camden');
           response.body.result[0].city.should.equal('Philadelphia');
-          done();
+          chai.request(server)
+            .get('/api/v1/zipcode')
+            .end((err2, response2) => {
+              response2.body.length.should.equal(6);
+              response2.body[5].name.should.equal('12345');
+              done();
+            });
         });
     });
 
@@ -217,7 +223,13 @@ describe('API Routes', () => {
           response.body.result[0].metro.should.equal('Philadelphia');
           response.body.result[0].county.should.equal('Camden');
           response.body.result[0].city.should.equal('Philadelphia');
-          done();
+          chai.request(server)
+            .get('/api/v1/neighborhood')
+            .end((err2, response2) => {
+              response2.body.length.should.equal(6);
+              response2.body[5].name.should.equal('Illadelphia');
+              done();
+            });
         });
     });
 
@@ -270,7 +282,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( must have authorization to delete', (done) => {
+    it(':( must have authorization to post', (done) => {
       chai.request(server)
         .post('/api/v1/zipcode')
         .end((err, response) => {
@@ -279,7 +291,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( must have authorization to delete', (done) => {
+    it(':( must have authorization to post', (done) => {
       chai.request(server)
         .post('/api/v1/zipcode')
         .set('Authorization', 'this should not work')
