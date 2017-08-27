@@ -6,7 +6,6 @@ const server = require('../server');
 
 const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
-// const configuration = require('../knexfile').test;
 const knex = require('knex')(configuration);
 
 chai.use(chaiHttp);
@@ -22,73 +21,73 @@ describe('API Routes', () => {
       .then(() => done());
   });
 
-  // describe('GET /v1/:regionType', () => {
-  //   it.skip(':) should return all entries for specified region type', (done) => {
-  //     // GEORGE
-  //     chai.request(server)
-  //       .get('/api/v1/state')
-  //       .end((err, response) => {
-  //         // test all the things!
-  //         done();
-  //       });
-  //   });
-  // 
-  //   it(':) should return filtered entries for region type with provided query parameters', (done) => {
-  //     // LINDSAY
-  //     chai.request(server)
-  //       .get('/api/v1/city?state=NY')
-  //       .end((err, response) => {
-  //         response.should.have.status(200);
-  //         response.should.be.json;
-  //         response.body.should.be.a('array');
-  //         response.body.length.should.equal(2);
-  //         response.body[0].should.have.property('id');
-  //         response.body[0].should.have.property('name');
-  //         response.body[0].should.have.property('metro_id');
-  //         response.body[0].should.have.property('state_id');
-  //         response.body[0].should.have.property('collected_on');
-  //         response.body[0].should.have.property('median_rent');
-  //         response.body[0].should.have.property('monthly_change');
-  //         response.body[0].should.have.property('quarterly_change');
-  //         response.body[0].should.have.property('yearly_change');
-  //         response.body[0].should.have.property('size_rank');
-  //         response.body[0].should.have.property('state');
-  //         response.body[0].should.have.property('metro');
-  //         response.body[0].should.have.property('county');
-  //         response.body[0].should.have.property('created_at');
-  //         response.body[0].should.have.property('updated_at');
-  //         response.body[0].name.should.equal('New York');
-  //         response.body[1].name.should.equal('Yonkers');
-  //         response.body[0].state.should.equal('NY');
-  //         response.body[1].state.should.equal('NY');
-  //         done();
-  //       });
-  //   });
-  // 
-  //   it(':) should return no entries if the provided query parameters do not match any records', (done) => {
-  //     // LINDSAY
-  //     chai.request(server)
-  //       .get('/api/v1/city?state=XX')
-  //       .end((err, response) => {
-  //         response.should.have.status(200);
-  //         response.should.be.json;
-  //         response.body.should.be.a('object');
-  //         response.body.err.should.equal('No matching entries');
-  //         done();
-  //       });
-  //   });
-  // 
-  //   it.skip(':( should return an error message for unprocessable region types', (done) => {
-  //     // GEORGE
-  //     chai.request(server)
-  //       .get('/api/v1/country')
-  //       .end((err, response) => {
-  //         // test all the things!
-  //         done();
-  //       });
-  //   });
-  // });
-  // 
+  describe('GET /v1/:regionType', () => {
+    it.skip(':) should return all entries for specified region type', (done) => {
+      // GEORGE
+      chai.request(server)
+        .get('/api/v1/state')
+        .end((err, response) => {
+          // test all the things!
+          done();
+        });
+    });
+
+    it(':) should return filtered entries for region type with provided query parameters', (done) => {
+      // LINDSAY
+      chai.request(server)
+        .get('/api/v1/city?state=NY')
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('metro_id');
+          response.body[0].should.have.property('state_id');
+          response.body[0].should.have.property('collected_on');
+          response.body[0].should.have.property('median_rent');
+          response.body[0].should.have.property('monthly_change');
+          response.body[0].should.have.property('quarterly_change');
+          response.body[0].should.have.property('yearly_change');
+          response.body[0].should.have.property('size_rank');
+          response.body[0].should.have.property('state');
+          response.body[0].should.have.property('metro');
+          response.body[0].should.have.property('county');
+          response.body[0].should.have.property('created_at');
+          response.body[0].should.have.property('updated_at');
+          response.body[0].name.should.equal('New York');
+          response.body[1].name.should.equal('Yonkers');
+          response.body[0].state.should.equal('NY');
+          response.body[1].state.should.equal('NY');
+          done();
+        });
+    });
+
+    it(':) should return no entries if the provided query parameters do not match any records', (done) => {
+      // LINDSAY
+      chai.request(server)
+        .get('/api/v1/city?state=XX')
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.err.should.equal('No matching entries');
+          done();
+        });
+    });
+
+    it.skip(':( should return an error message for unprocessable region types', (done) => {
+      // GEORGE
+      chai.request(server)
+        .get('/api/v1/country')
+        .end((err, response) => {
+          // test all the things!
+          done();
+        });
+    });
+  });
+
   // describe('POST /v1/:regionType', () => {
   //   // GEORGE
   //   it.skip(':) should add an entry to the zipcode table', (done) => {
