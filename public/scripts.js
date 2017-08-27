@@ -21,10 +21,3 @@ const fetchToken = () => {
       document.querySelector('p').textContent = `${response.msg} \n ${response.token}`;
     });
 };
-
-
-// {
-  //   method: 'POST',
-  //   body: JSON.stringify({ email, password }),
-  //   headers: { 'Content-Type': 'application/json' },
-  // })
