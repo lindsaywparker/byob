@@ -85,7 +85,7 @@ describe('API Routes', () => {
         .end((err, response) => {
           response.status.should.equal(404);
           response.should.be.json;
-          response.error.text.should.equal('{"err":"Table not found"}');
+          response.body.err.should.equal('Table not found');
           done();
         });
     });
@@ -316,22 +316,23 @@ describe('API Routes', () => {
   });
 
   describe('DELETE /v1/:regionType', () => {
-    // GEORGE
-    it.skip(':) should delete all entries in a region table', (done) => {
+    it(':) should delete all entries in a region table', (done) => {
       chai.request(server)
-        .delete('/api/v1/neighborhood')
+        .get('/api/v1/zipcode')
         .end((err, response) => {
-          // test all the things!
-          done();
-        });
-    });
-
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
-      chai.request(server)
-        .delete('/api/v1/neighborhoods')
-        .end((err, response) => {
-          // test all the things!
-          done();
+          response.body.length.should.equal(5);
+          chai.request(server)
+            .delete('/api/v1/zipcode')
+            .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+            .end((error2, response2) => {
+              response2.body.result.should.equal(5);
+              chai.request(server)
+                .get('/api/v1/zipcode')
+                .end((err3, response3) => {
+                  response3.body.length.should.equal(0);
+                  done();
+                });
+            });
         });
     });
   });
