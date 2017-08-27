@@ -27,7 +27,42 @@ describe('API Routes', () => {
       chai.request(server)
         .get('/api/v1/state')
         .end((err, response) => {
-          // test all the things!
+          response.status.should.equal(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(20);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('collected_on');
+          response.body[0].should.have.property('median_rent');
+          response.body[0].should.have.property('monthly_change');
+          response.body[0].should.have.property('quarterly_change');
+          response.body[0].should.have.property('yearly_change');
+          response.body[0].should.have.property('size_rank');
+          response.body[0].should.have.property('created_at');
+          response.body[0].should.have.property('updated_at');
+          response.body[0].should.have.property('abbr');
+          response.body[0].id.should.equal(1);
+          response.body[0].name.should.equal('California');
+          response.body[0].median_rent.should.equal(2438);
+          response.body[0].size_rank.should.equal(1);
+          response.body[0].abbr.should.equal('CA');
+          response.body[19].should.have.property('id');
+          response.body[19].should.have.property('name');
+          response.body[19].should.have.property('collected_on');
+          response.body[19].should.have.property('median_rent');
+          response.body[19].should.have.property('monthly_change');
+          response.body[19].should.have.property('quarterly_change');
+          response.body[19].should.have.property('yearly_change');
+          response.body[19].should.have.property('size_rank');
+          response.body[19].should.have.property('created_at');
+          response.body[19].should.have.property('updated_at');
+          response.body[19].should.have.property('abbr');
+          response.body[19].id.should.equal(20);
+          response.body[19].name.should.equal('Wisconsin');
+          response.body[19].median_rent.should.equal(1160);
+          response.body[19].size_rank.should.equal(20);
+          response.body[19].abbr.should.equal('WI');
           done();
         });
     });
@@ -43,26 +78,22 @@ describe('API Routes', () => {
         });
     });
 
-    it.skip(':( should return an error message for unprocessable region types', (done) => {
+    it(':( should return an error message for unprocessable region types', (done) => {
       // GEORGE
       chai.request(server)
         .get('/api/v1/country')
         .end((err, response) => {
-          // test all the things!
+          response.status.should.equal(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"err":"Table not found"}');
           done();
         });
     });
   });
 
   describe('POST /v1/:regionType', () => {
-    // GEORGE
-    it.skip(':) should add an entry to the zipcode table', (done) => {
-      chai.request(server)
-        .post('/api/v1/zipcode')
-        .end((err, response) => {
-          // test all the things!
-          done();
-        });
+    it(':) should add an entry to the zipcode table', (done) => {
+
     });
 
     it.skip(':) should add an entry to the neighborhood table', (done) => {
@@ -179,4 +210,3 @@ describe('API Routes', () => {
     });
   });
 });
-

@@ -24,8 +24,9 @@ const getRegionData = (request, response) => {
     .catch((err) => {
       if (err.code === '42P01') {
         response.status(404).json({ err: 'Table not found' });
+      } else {
+        response.status(500).json(err);
       }
-      response.status(500).json(err);
     });
 };
 
