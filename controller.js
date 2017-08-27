@@ -19,11 +19,14 @@ const getRegionData = (request, response) => {
       }
     })
     .then((data) => {
+      if (data.length === 0) {
+        return response.status(200).json({ err: 'No matching entries' });
+      }
       response.status(200).json(data);
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
+        return response.status(404).json({ err: 'Table not found' });
       }
       response.status(500).json(err);
     });
@@ -47,7 +50,7 @@ const addRegionData = (request, response) => {
       })
       .catch((err) => {
         if (err.code === '42P01') {
-          response.status(404).json({ err: 'Table not found' });
+          return response.status(404).json({ err: 'Table not found' });
         }
         response.status(500).json({ err });
       });
@@ -69,7 +72,7 @@ const updateRegionData = (request, response) => {
       .catch(err => response.status(500).json({ err })))
     .catch((err) => {
       if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
+        return response.status(404).json({ err: 'Table not found' });
       }
       response.status(500).json({ err });
     });
@@ -81,11 +84,14 @@ const updateSpecificRegionData = (request, response) => {
 
   db(regionType).where('id', id).update(updates)
     .then((result) => {
-      response.status(200).json({ result });
+      response.status(200).json({ msg: `${result} record(s) successfully updated`, result });
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
+        return response.status(404).json({ err: 'Table not found' });
+      }
+      if (err.code === '42703') {
+        return response.status(422).json({ err: 'Undefined column' });
       }
       response.status(500).json({ err });
     });
@@ -100,7 +106,7 @@ const deleteRegionData = (request, response) => {
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        response.status(404).json({ err: 'Table not found' });
+        return response.status(404).json({ err: 'Table not found' });
       }
       response.status(500).json({ err });
     });
@@ -109,6 +115,9 @@ const deleteRegionData = (request, response) => {
 const deleteSpecificRegionData = (request, response) => {
   db(request.params.regionType).where('id', request.params.id).del()
     .then((result) => {
+      if (result === 0) {
+        return response.status(200).json({ err: 'No matching entry to delete' });
+      }
       response.status(200).json(result);
     })
     .catch((err) => {
