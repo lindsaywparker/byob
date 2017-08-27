@@ -335,6 +335,17 @@ describe('API Routes', () => {
             });
         });
     });
+
+    it(':( should return a clear error message if entry is unprocessable', (done) => {
+      chai.request(server)
+        .delete('/api/v1/metro')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .end((err, response) => {
+          response.body.err.code.should.equal('23503');
+          response.body.err.should.have.property('detail');
+          done();
+        });
+    });
   });
 
   describe('DELETE /v1/:regionType/:id', () => {
