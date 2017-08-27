@@ -18,6 +18,9 @@ const fetchToken = () => {
   })
     .then(blob => blob.json())
     .then((response) => {
-      document.querySelector('p').textContent = `${response.msg} \n ${response.token}`;
+      document.querySelector('.success-msg').textContent = `${response.msg}`;
+      document.querySelector('.token').textContent = `${response.token}`;
+      document.getElementById('email-input').value = '';
+      document.getElementById('app-input').value = '';
     });
 };
