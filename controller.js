@@ -38,7 +38,7 @@ const addRegionData = (request, response) => {
         const cityId = data[0].id;
         const metroId = data[0].metro_id;
         const stateId = data[0].state_id;
-        return db('zipcode').insert(Object.assign(request.body, {
+        return db(regionType).insert(Object.assign(request.body, {
           city_id: cityId,
           metro_id: metroId,
           state_id: stateId,
