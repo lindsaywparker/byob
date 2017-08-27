@@ -157,7 +157,7 @@ describe('API Routes', () => {
         });
     });
 
-    it.skip(':) should add an entry to the neighborhood table', (done) => {
+    it(':) should add an entry to the neighborhood table', (done) => {
       const newNeighb = {
         id: 6,
         name: 'Illadelphia',
@@ -177,10 +177,12 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .post('/api/v1/neighborhood')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .send(newNeighb)
         .end((err, response) => {
           response.status.should.equal(201);
           response.should.be.json;
-          response.body.should.be.a('array');
+          response.body.result.should.be.a('array');
           response.body.result.length.should.equal(1);
           response.body.result[0].should.have.property('id');
           response.body.result[0].should.have.property('name');
@@ -199,6 +201,22 @@ describe('API Routes', () => {
           response.body.result[0].should.have.property('city');
           response.body.result[0].should.have.property('created_at');
           response.body.result[0].should.have.property('updated_at');
+
+          response.body.result[0].id.should.equal(6);
+          response.body.result[0].name.should.equal('Illadelphia');
+          response.body.result[0].metro_id.should.equal(5);
+          response.body.result[0].state_id.should.equal(6);
+          response.body.result[0].city_id.should.equal(4);
+          response.body.result[0].collected_on.should.equal('2017-06-30T06:00:00.000Z');
+          response.body.result[0].median_rent.should.equal(500);
+          response.body.result[0].monthly_change.should.equal('10.10');
+          response.body.result[0].quarterly_change.should.equal('99.99');
+          response.body.result[0].yearly_change.should.equal('1.21');
+          response.body.result[0].size_rank.should.equal(999);
+          response.body.result[0].state.should.equal('PA');
+          response.body.result[0].metro.should.equal('Philadelphia');
+          response.body.result[0].county.should.equal('Camden');
+          response.body.result[0].city.should.equal('Philadelphia');
           done();
         });
     });
