@@ -150,7 +150,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -220,7 +220,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(newNeighb)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -282,7 +282,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(newNeighb)
         .end((err, response) => {
           response.body.err.code.should.equal('23502');
@@ -311,7 +311,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/state')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(newZip)
         .end((err, response) => {
           response.body.err.should.equal('Unacceptable POST target');
@@ -354,7 +354,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -396,7 +396,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -500,7 +500,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(updates)
         .end((err, response) => {
           response.should.have.status(404);
@@ -523,7 +523,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -555,7 +555,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -610,7 +610,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods/10')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(update)
         .end((err, response) => {
           response.body.err.should.equal('Table not found');
@@ -623,7 +623,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .send(badUpdate)
         .end((err, response) => {
           response.body.err.should.equal('Undefined column');
@@ -640,7 +640,7 @@ describe('API Routes', () => {
           response.body.length.should.equal(5);
           chai.request(server)
             .delete('/api/v1/zipcode')
-            .set('Authorization', adminToken)
+            .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
             .end((error2, response2) => {
               response2.body.result.should.equal(5);
               chai.request(server)
@@ -656,7 +656,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/metro')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
@@ -689,7 +689,7 @@ describe('API Routes', () => {
     it(':) should be a secure endpoint', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/2')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
           response.should.have.status(200);
         });
@@ -713,7 +713,7 @@ describe('API Routes', () => {
     it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
@@ -733,7 +733,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/100')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
