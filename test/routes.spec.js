@@ -129,7 +129,7 @@ describe('API Routes', () => {
 
   describe('PUT /v1/:regionType', () => {
     // LINDSAY
-    it(':) should be a secure endpoint', () => {
+    it(':) should be a secure endpoint', (done) => {
       const update = {
         data: [
           {
@@ -353,48 +353,68 @@ describe('API Routes', () => {
           response.body.should.have.property('result');
           response.body.msg.should.equal('1 record(s) successfully updated');
           response.body.result.should.equal(1);
-        });
 
-      chai.request(server)
-        .get('/api/v1/neighborhood?name=Upper+West+Side')
-        .end((err, response) => {
-          response.body[0].should.have.property('id');
-          response.body[0].should.have.property('name');
-          response.body[0].should.have.property('metro_id');
-          response.body[0].should.have.property('state_id');
-          response.body[0].should.have.property('city_id');
-          response.body[0].should.have.property('collected_on');
-          response.body[0].should.have.property('median_rent');
-          response.body[0].should.have.property('monthly_change');
-          response.body[0].should.have.property('quarterly_change');
-          response.body[0].should.have.property('yearly_change');
-          response.body[0].should.have.property('size_rank');
-          response.body[0].should.have.property('state');
-          response.body[0].should.have.property('metro');
-          response.body[0].should.have.property('county');
-          response.body[0].should.have.property('city');
-          response.body[0].should.have.property('created_at');
-          response.body[0].should.have.property('updated_at');
-          response.body[0].id.should.equal(1);
-          response.body[0].name.should.equal('Upper West Side');
-          response.body[0].metro_id.should.equal(1);
-          response.body[0].state_id.should.equal(3);
-          response.body[0].city_id.should.equal(1);
-          response.body[0].median_rent.should.equal(2999);
-          response.body[0].size_rank.should.equal(2);
-          response.body[0].state.should.equal('NY');
-          response.body[0].metro.should.equal('New York');
-          response.body[0].county.should.equal('New York');
-          response.body[0].city.should.equal('New York');
-          done();
+          chai.request(server)
+            .get('/api/v1/neighborhood?name=Upper+West+Side')
+            .end((err, response) => {
+              response.body[0].should.have.property('id');
+              response.body[0].should.have.property('name');
+              response.body[0].should.have.property('metro_id');
+              response.body[0].should.have.property('state_id');
+              response.body[0].should.have.property('city_id');
+              response.body[0].should.have.property('collected_on');
+              response.body[0].should.have.property('median_rent');
+              response.body[0].should.have.property('monthly_change');
+              response.body[0].should.have.property('quarterly_change');
+              response.body[0].should.have.property('yearly_change');
+              response.body[0].should.have.property('size_rank');
+              response.body[0].should.have.property('state');
+              response.body[0].should.have.property('metro');
+              response.body[0].should.have.property('county');
+              response.body[0].should.have.property('city');
+              response.body[0].should.have.property('created_at');
+              response.body[0].should.have.property('updated_at');
+              response.body[0].id.should.equal(1);
+              response.body[0].name.should.equal('Upper West Side');
+              response.body[0].metro_id.should.equal(1);
+              response.body[0].state_id.should.equal(3);
+              response.body[0].city_id.should.equal(1);
+              response.body[0].median_rent.should.equal(2999);
+              response.body[0].size_rank.should.equal(2);
+              response.body[0].state.should.equal('NY');
+              response.body[0].metro.should.equal('New York');
+              response.body[0].county.should.equal('New York');
+              response.body[0].city.should.equal('New York');
+              done();
+            });
         });
     });
 
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
+    it(':( should return a clear error message if entry is unprocessable', (done) => {
+      const update = {
+        median_rent: 2999,
+        size_rank: 2,
+      };
+
+      chai.request(server)
+        .put('/api/v1/neighborhoods/10')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .send(update)
+        .end((err, response) => {
+          response.body.err.should.equal('Table not found');
+        });
+
+      const badUpdate = {
+        BADKEYmedian_rent: 2999,
+        size_rank: 2,
+      };
+
       chai.request(server)
         .put('/api/v1/neighborhood/1')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .send(badUpdate)
         .end((err, response) => {
-          // test all the things!
+          response.body.err.should.equal('Undefined column');
           done();
         });
     });
@@ -423,7 +443,7 @@ describe('API Routes', () => {
 
   describe('DELETE /v1/:regionType/:id', () => {
     // LINDSAY
-    it(':) should be a secure endpoint', () => {
+    it(':) should be a secure endpoint', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/2')
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
@@ -433,7 +453,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .delete('/api/v1/neighborhood/3')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
+        .set('Authorization', 'BADTOKENeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
           response.should.have.status(403);
         });
@@ -452,19 +472,30 @@ describe('API Routes', () => {
         .delete('/api/v1/neighborhood/1')
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
-          console.log(response.body);
           response.should.have.status(200);
           response.should.be.json;
-          done();
+
+          chai.request(server)
+            .get('/api/v1/neighborhood?name=Upper+West+Side')
+            .end((err, response) => {
+              response.should.have.status(200);
+              response.should.be.json;
+              response.body.should.have.property('err');
+              response.body.err.should.equal('No matching entries');
+              done();
+            });
         });
     });
 
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
+    it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/100')
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx3cEB0dXJpbmcuaW8iLCJhcHBOYW1lIjoiYm9iIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzYwODAyNn0.tLsJdo6YmImo5pXMALELcBvhUERQbbAHi1NYw8sF1W8')
         .end((err, response) => {
-          // test all the things!
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.have.property('err');
+          response.body.err.should.equal('No matching entry to delete');
           done();
         });
     });

@@ -90,6 +90,9 @@ const updateSpecificRegionData = (request, response) => {
       if (err.code === '42P01') {
         return response.status(404).json({ err: 'Table not found' });
       }
+      if (err.code === '42703') {
+        return response.status(422).json({ err: 'Undefined column' });
+      }
       response.status(500).json({ err });
     });
 };
@@ -112,6 +115,9 @@ const deleteRegionData = (request, response) => {
 const deleteSpecificRegionData = (request, response) => {
   db(request.params.regionType).where('id', request.params.id).del()
     .then((result) => {
+      if (result === 0) {
+        return response.status(200).json({ err: 'No matching entry to delete' });
+      }
       response.status(200).json(result);
     })
     .catch((err) => {
