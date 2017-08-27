@@ -11,8 +11,6 @@ const knex = require('knex')(configuration);
 const adminToken = process.env.ADMIN_TOKEN;
 const badToken = process.env.BAD_TOKEN;
 
-console.log(adminToken, badToken, process.env.SECRET_KEY);
-
 chai.use(chaiHttp);
 
 describe('API Routes', () => {
@@ -27,7 +25,7 @@ describe('API Routes', () => {
   });
 
   describe('GET /v1/:regionType', () => {
-    it.skip(':) should return all entries for specified region type', (done) => {
+    it(':) should return all entries for specified region type', (done) => {
       // GEORGE
       chai.request(server)
         .get('/api/v1/state')
@@ -152,7 +150,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -222,7 +220,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(newNeighb)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -284,7 +282,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(newNeighb)
         .end((err, response) => {
           response.body.err.code.should.equal('23502');
@@ -313,7 +311,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/state')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(newZip)
         .end((err, response) => {
           response.body.err.should.equal('Unacceptable POST target');
@@ -398,7 +396,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', `${adminToken}`)
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -642,13 +640,13 @@ describe('API Routes', () => {
           response.body.length.should.equal(5);
           chai.request(server)
             .delete('/api/v1/zipcode')
-            .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+            .set('Authorization', adminToken)
             .end((error2, response2) => {
               response2.body.result.should.equal(5);
               chai.request(server)
                 .get('/api/v1/zipcode')
                 .end((err3, response3) => {
-                  response3.body.length.should.equal(0);
+                  response3.body.err.should.equal('No matching entries');
                   done();
                 });
             });
@@ -658,7 +656,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/metro')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
