@@ -14,13 +14,12 @@ const checkAuth = (request, response, next) => {
     return response.status(403).json({ err: 'You must be authorized to hit this endpoint' });
   }
 
-  const decoded = jwt.verify(token, privateKey);
-
-  if (!decoded.admin) {
-    return response.status(403).json({ err: 'You must be authorized to hit this endpoint' });
-  }
-
-  next();
+  jwt.verify(token, privateKey, (err, decoded) => {
+    if (err) {
+      return response.status(403).json({ err: 'You must be authorized to hit this endpoint' });
+    }
+    next();
+  });
 };
 
 router.post('/requestjwt', controller.generateJWT);
