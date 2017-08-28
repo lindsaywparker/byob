@@ -647,26 +647,24 @@ describe('API Routes', () => {
             .end((err, response) => {
               response.should.have.status(200);
               response.should.be.json;
-              console.log(response.body);
               response.body.length.should.equal(0);
               done();
             });
         });
     });
 
-    // it(':( should return a clear error message if entry is unprocessable', (done) => {
-    //   chai.request(server)
-    //     .delete('/api/v1/neighborhood/100')
-    //     .set('Authorization', adminToken)
-    //     .end((err, response) => {
-    //       response.should.have.status(200);
-    //       response.should.be.json;
-    //       response.body.should.have.property('err');
-    //       response.body.err.should.equal('No matching entry to delete');
-    //       done();
-    //     });
-    // });
-    // 
+    it(':( should return a clear error message if entry is unprocessable', (done) => {
+      chai.request(server)
+        .delete('/api/v1/metro/1')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .end((err, response) => {
+          console.log(response.body.err);
+          response.body.err.code.should.equal('23503');
+          response.body.err.should.have.property('detail');
+          done();
+        });
+    });
+
     // it(':( must have authorization to delete', (done) => {
     //   chai.request(server)
     //     .delete('/api/v1/zipcode/1')
