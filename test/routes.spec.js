@@ -338,13 +338,56 @@ describe('API Routes', () => {
 
   describe('PUT /v1/:regionType', () => {
     // LINDSAY
-    it.skip(':) should update all matching provided entries in the associated region table', (done) => {
+    it(':) should update single matching entry in region table', (done) => {
+      const update = {
+        median_rent: 2999,
+        size_rank: 2,
+      };
       chai.request(server)
-        .put('/api/v1/neighborhood')
+        .put('/api/v1/neighborhood/1')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .send(update)
         .end((err, response) => {
-          // test all the things!
-          // should skip over unmatched entries
-          done();
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.should.have.property('msg');
+          response.body.should.have.property('result');
+          response.body.msg.should.equal('1 record(s) successfully updated');
+          response.body.result.should.equal(1);
+          chai.request(server)
+            .get('/api/v1/neighborhood?name=Upper+West+Side')
+            .end((err, response) => {
+              response.body[0].should.have.property('id');
+              response.body[0].should.have.property('name');
+              response.body[0].should.have.property('metro_id');
+              response.body[0].should.have.property('state_id');
+              response.body[0].should.have.property('city_id');
+              response.body[0].should.have.property('collected_on');
+              response.body[0].should.have.property('median_rent');
+              response.body[0].should.have.property('monthly_change');
+              response.body[0].should.have.property('quarterly_change');
+              response.body[0].should.have.property('yearly_change');
+              response.body[0].should.have.property('size_rank');
+              response.body[0].should.have.property('state');
+              response.body[0].should.have.property('metro');
+              response.body[0].should.have.property('county');
+              response.body[0].should.have.property('city');
+              response.body[0].should.have.property('created_at');
+              response.body[0].should.have.property('updated_at');
+              response.body[0].id.should.equal(1);
+              response.body[0].name.should.equal('Upper West Side');
+              response.body[0].metro_id.should.equal(1);
+              response.body[0].state_id.should.equal(3);
+              response.body[0].city_id.should.equal(1);
+              response.body[0].median_rent.should.equal(2999);
+              response.body[0].size_rank.should.equal(2);
+              response.body[0].state.should.equal('NY');
+              response.body[0].metro.should.equal('New York');
+              response.body[0].county.should.equal('New York');
+              response.body[0].city.should.equal('New York');
+              done();
+            });
         });
     });
 
