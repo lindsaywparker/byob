@@ -465,31 +465,30 @@ describe('API Routes', () => {
         .end((err, response) => {
           response.should.have.status(404);
           response.should.be.json;
-          console.log(response.body.err);
           response.body.should.be.a('object');
           response.body.err.should.equal('Table not found');
           done();
         });
     });
 
-    // it(':( must have authorization to post', (done) => {
-    //   chai.request(server)
-    //     .put('/api/v1/zipcode')
-    //     .end((err, response) => {
-    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
-    //       done();
-    //     });
-    // });
-    // 
-    // it(':( must have authorization to post', (done) => {
-    //   chai.request(server)
-    //     .put('/api/v1/zipcode')
-    //     .set('Authorization', 'this should not work')
-    //     .end((err, response) => {
-    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
-    //       done();
-    //     });
-    // });
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
+
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode')
+        .set('Authorization', 'this should not work')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
   });
 
   describe('PUT /v1/:regionType/:id', () => {
