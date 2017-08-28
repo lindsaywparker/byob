@@ -400,11 +400,29 @@ describe('API Routes', () => {
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(badUpdate)
         .end((err, response) => {
-          console.log(response.body.err);
-          response.body.err.should.equal('Unacceptable POST target');
+          response.body.err.code.should.equal('42703');
           done();
         });
     });
+
+    // it(':( must have authorization to post', (done) => {
+    //   chai.request(server)
+    //     .post('/api/v1/zipcode')
+    //     .end((err, response) => {
+    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
+    //       done();
+    //     });
+    // });
+    // 
+    // it(':( must have authorization to post', (done) => {
+    //   chai.request(server)
+    //     .post('/api/v1/zipcode')
+    //     .set('Authorization', 'this should not work')
+    //     .end((err, response) => {
+    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
+    //       done();
+    //     });
+    // });
   });
 
   describe('PUT /v1/:regionType/:id', () => {
