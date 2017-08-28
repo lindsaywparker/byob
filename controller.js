@@ -50,7 +50,7 @@ const addRegionData = (request, response) => {
         if (err.code === '42P01') {
           response.status(404).json({ err: 'Table not found' });
         } else {
-          response.status(500).json(err);
+          response.status(500).json({ err });
         }
       });
   } else {
@@ -73,7 +73,7 @@ const updateRegionData = (request, response) => {
       if (err.code === '42P01') {
         response.status(404).json({ err: 'Table not found' });
       } else {
-        response.status(500).json(err);
+        response.status(500).json({ err });
       }
     });
 };
@@ -90,7 +90,7 @@ const updateSpecificRegionData = (request, response) => {
       if (err.code === '42P01') {
         response.status(404).json({ err: 'Table not found' });
       } else {
-        response.status(500).json(err);
+        response.status(500).json({ err });
       }
     });
 };
@@ -106,7 +106,7 @@ const deleteRegionData = (request, response) => {
       if (err.code === '42P01') {
         response.status(404).json({ err: 'Table not found' });
       } else {
-        response.status(500).json(err);
+        response.status(500).json({ err });
       }
     });
 };
@@ -120,7 +120,7 @@ const deleteSpecificRegionData = (request, response) => {
       if (err.code === '42P01') {
         response.status(404).json({ err: 'Table not found' });
       } else {
-        response.status(500).json(err);
+        response.status(500).json({ err });
       }
     });
 };
