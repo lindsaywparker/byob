@@ -1,7 +1,7 @@
 ## Build Your Own Backend (BYOB) - A Turing Mod 4 FEE Project
 
 ### Synopsis - GEORGE
-<!-- This project converts user-provided long URLs and converts them to short URLs while saving them to a selected folder.  It is built on the front-end with jQuery and the back-end with Node/Express, knex, and PostgreSQL.
+This API follows CRUD design using the Zillow Zri data for rental markets in the United States, from the state level down to the local level, separated by either neighborhood name or zipcode.
 
 Design inspiration came from [@ToshTak](https://dribbble.com/ToshTak) on [Dribble](https://dribbble.com/shots/2040722-Engage-Prague-2015/attachments/362802). -->
 
