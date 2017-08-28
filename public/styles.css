@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  text-align: center;
+}
+
+h1 {
+  font-weight: 600;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
+  height: 25px;
+  width: 300px;
+  margin: 8px;
+}
+
+#submit-jwt-request {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.jwt-response {
+  width: 90%;
+  margin: 32px auto;
+}
+
+.token {
+  word-wrap: break-word;
+}
