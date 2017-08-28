@@ -26,7 +26,6 @@ describe('API Routes', () => {
 
   describe('GET /v1/:regionType', () => {
     it(':) should return all entries for specified region type', (done) => {
-      // GEORGE
       chai.request(server)
         .get('/api/v1/state')
         .end((err, response) => {
@@ -71,7 +70,6 @@ describe('API Routes', () => {
     });
 
     it(':) should return filtered entries for region type with provided query parameters', (done) => {
-      // LINDSAY
       chai.request(server)
         .get('/api/v1/city?state=NY')
         .end((err, response) => {
@@ -116,7 +114,6 @@ describe('API Routes', () => {
     });
 
     it(':( should return an error message for unprocessable region types', (done) => {
-      // GEORGE
       chai.request(server)
         .get('/api/v1/country')
         .end((err, response) => {
@@ -150,7 +147,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -220,7 +217,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(newNeighb)
         .end((err, response) => {
           response.status.should.equal(201);
