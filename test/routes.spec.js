@@ -11,7 +11,6 @@ const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
 
 const adminToken = process.env.ADMIN_TOKEN;
-const adminToken2 = process.env.ADMIN_TOKEN2;
 
 chai.use(chaiHttp);
 
@@ -148,7 +147,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjJnZ0B0dXJpbmcuaW8iLCJhcHBOYW1lIjoiTHVuYURlcmciLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNTAzODg5NDI3fQ.ko9ghwcNHn9lqo2nsUF81uVxRDMixiC1ZTZSYfMlw58')
+        .set('Authorization', adminToken)
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -551,7 +550,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(badUpdate)
         .end((err, response) => {
           response.body.err.code.should.equal('42703');
@@ -587,7 +586,7 @@ describe('API Routes', () => {
           response.body.length.should.equal(5);
           chai.request(server)
             .delete('/api/v1/zipcode')
-            .set('Authorization', adminToken2)
+            .set('Authorization', adminToken)
             .end((error2, response2) => {
               response2.body.result.should.equal(5);
               chai.request(server)
@@ -603,7 +602,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/metro')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
@@ -635,7 +634,7 @@ describe('API Routes', () => {
     it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
@@ -654,7 +653,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/metro/1')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
