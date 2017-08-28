@@ -51,9 +51,10 @@ const addRegionData = (request, response) => {
       })
       .catch((err) => {
         if (err.code === '42P01') {
-          return response.status(404).json({ err: 'Table not found' });
+          response.status(404).json({ err: 'Table not found' });
+        } else {
+          response.status(500).json({ err });
         }
-        response.status(500).json({ err });
       });
   } else {
     response.status(405).json({ err: 'Unacceptable POST target' });
@@ -73,9 +74,10 @@ const updateRegionData = (request, response) => {
       .catch(err => response.status(500).json({ err })))
     .catch((err) => {
       if (err.code === '42P01') {
-        return response.status(404).json({ err: 'Table not found' });
+        response.status(404).json({ err: 'Table not found' });
+      } else {
+        response.status(500).json({ err });
       }
-      response.status(500).json({ err });
     });
 };
 
@@ -89,12 +91,10 @@ const updateSpecificRegionData = (request, response) => {
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        return response.status(404).json({ err: 'Table not found' });
+        response.status(404).json({ err: 'Table not found' });
+      } else {
+        response.status(500).json({ err });
       }
-      if (err.code === '42703') {
-        return response.status(422).json({ err: 'Undefined column' });
-      }
-      response.status(500).json({ err });
     });
 };
 
@@ -107,9 +107,10 @@ const deleteRegionData = (request, response) => {
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        return response.status(404).json({ err: 'Table not found' });
+        response.status(404).json({ err: 'Table not found' });
+      } else {
+        response.status(500).json({ err });
       }
-      response.status(500).json({ err });
     });
 };
 
@@ -123,9 +124,10 @@ const deleteSpecificRegionData = (request, response) => {
     })
     .catch((err) => {
       if (err.code === '42P01') {
-        return response.status(404).json({ err: 'Table not found' });
+        response.status(404).json({ err: 'Table not found' });
+      } else {
+        response.status(500).json({ err });
       }
-      response.status(500).json({ err });
     });
 };
 

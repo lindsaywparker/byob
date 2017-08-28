@@ -109,8 +109,8 @@ describe('API Routes', () => {
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
-          response.body.should.be.a('object');
-          response.body.err.should.equal('No matching entries');
+          response.body.should.be.a('array');
+          response.body.length.should.equal(0);
           done();
         });
     });
@@ -341,43 +341,6 @@ describe('API Routes', () => {
 
   describe('PUT /v1/:regionType', () => {
     // LINDSAY
-    it(':) should be a secure endpoint', (done) => {
-      const update = {
-        data: [
-          {
-            name: 'Upper West Side',
-            median_rent: 3999,
-            size_rank: 2,
-          },
-        ],
-      };
-
-      chai.request(server)
-        .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
-        .send(update)
-        .end((err, response) => {
-          response.should.have.status(200);
-        });
-
-      chai.request(server)
-        .put('/api/v1/neighborhood')
-        .set('Authorization', badToken)
-        .send(update)
-        .end((err, response) => {
-          response.should.have.status(403);
-        });
-
-      chai.request(server)
-        .put('/api/v1/neighborhood')
-        // no token
-        .send(update)
-        .end((err, response) => {
-          response.should.have.status(403);
-          done();
-        });
-    });
-
     it(':) should update all matching provided entries in the associated region table', (done) => {
       const updates = {
         data: [
@@ -396,7 +359,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -500,7 +463,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(updates)
         .end((err, response) => {
           response.should.have.status(404);
@@ -510,62 +473,44 @@ describe('API Routes', () => {
           done();
         });
     });
-  });
 
-  describe('PUT /v1/:regionType/:id', () => {
-    // LINDSAY
-    it(':) should be a secure endpoint', () => {
-      const update = {
-        name: 'Upper West Side',
-        median_rent: 3999,
-        size_rank: 2,
-      };
-
+    it(':( must have authorization to post', (done) => {
       chai.request(server)
-        .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken)
-        .send(update)
+        .put('/api/v1/zipcode')
         .end((err, response) => {
-          response.should.have.status(200);
-        });
-
-      chai.request(server)
-        .put('/api/v1/neighborhood')
-        .set('Authorization', badToken)
-        .send(update)
-        .end((err, response) => {
-          response.should.have.status(403);
-        });
-
-      chai.request(server)
-        .put('/api/v1/neighborhood')
-        // no token
-        .send(update)
-        .end((err, response) => {
-          response.should.have.status(403);
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
           done();
         });
     });
 
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode')
+        .set('Authorization', 'this should not work')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
+  });
+
+  describe('PUT /v1/:regionType/:id', () => {
+    // LINDSAY
     it(':) should update single matching entry in region table', (done) => {
       const update = {
         median_rent: 2999,
         size_rank: 2,
       };
-
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('object');
-          response.body.should.have.property('msg');
           response.body.should.have.property('result');
-          response.body.msg.should.equal('1 record(s) successfully updated');
           response.body.result.should.equal(1);
-
           chai.request(server)
             .get('/api/v1/neighborhood?name=Upper+West+Side')
             .end((err, response) => {
@@ -602,20 +547,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( should return a clear error message if entry is unprocessable', (done) => {
-      const update = {
-        median_rent: 2999,
-        size_rank: 2,
-      };
-
-      chai.request(server)
-        .put('/api/v1/neighborhoods/10')
-        .set('Authorization', adminToken)
-        .send(update)
-        .end((err, response) => {
-          response.body.err.should.equal('Table not found');
-        });
-
+    it(':( should return a clear error message if associated region does not exist in the database', (done) => {
       const badUpdate = {
         BADKEYmedian_rent: 2999,
         size_rank: 2,
@@ -623,10 +555,29 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(badUpdate)
         .end((err, response) => {
-          response.body.err.should.equal('Undefined column');
+          response.body.err.code.should.equal('42703');
+          done();
+        });
+    });
+
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode/1')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
+
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode/1')
+        .set('Authorization', 'this should not work')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
           done();
         });
     });
@@ -686,34 +637,10 @@ describe('API Routes', () => {
 
   describe('DELETE /v1/:regionType/:id', () => {
     // LINDSAY
-    it(':) should be a secure endpoint', (done) => {
-      chai.request(server)
-        .delete('/api/v1/neighborhood/2')
-        .set('Authorization', adminToken)
-        .end((err, response) => {
-          response.should.have.status(200);
-        });
-
-      chai.request(server)
-        .delete('/api/v1/neighborhood/3')
-        .set('Authorization', badToken)
-        .end((err, response) => {
-          response.should.have.status(403);
-        });
-
-      chai.request(server)
-        .delete('/api/v1/neighborhood/4')
-        // no token
-        .end((err, response) => {
-          response.should.have.status(403);
-          done();
-        });
-    });
-
     it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
@@ -723,8 +650,7 @@ describe('API Routes', () => {
             .end((err, response) => {
               response.should.have.status(200);
               response.should.be.json;
-              response.body.should.have.property('err');
-              response.body.err.should.equal('No matching entries');
+              response.body.length.should.equal(0);
               done();
             });
         });
@@ -732,13 +658,30 @@ describe('API Routes', () => {
 
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
-        .delete('/api/v1/neighborhood/100')
-        .set('Authorization', adminToken)
+        .delete('/api/v1/metro/1')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .end((err, response) => {
-          response.should.have.status(200);
-          response.should.be.json;
-          response.body.should.have.property('err');
-          response.body.err.should.equal('No matching entry to delete');
+          response.body.err.code.should.equal('23503');
+          response.body.err.should.have.property('detail');
+          done();
+        });
+    });
+
+    it(':( must have authorization to delete', (done) => {
+      chai.request(server)
+        .delete('/api/v1/zipcode/1')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
+
+    it(':( must have authorization to delete', (done) => {
+      chai.request(server)
+        .delete('/api/v1/zipcode/1')
+        .set('Authorization', 'this should not work')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
           done();
         });
     });
