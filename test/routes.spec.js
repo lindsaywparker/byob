@@ -470,7 +470,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( must have authorization to post', (done) => {
+    it(':( must have authorization to put', (done) => {
       chai.request(server)
         .put('/api/v1/zipcode')
         .end((err, response) => {
@@ -479,7 +479,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( must have authorization to post', (done) => {
+    it(':( must have authorization to put', (done) => {
       chai.request(server)
         .put('/api/v1/zipcode')
         .set('Authorization', 'this should not work')
@@ -558,7 +558,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( must have authorization to post', (done) => {
+    it(':( must have authorization to put', (done) => {
       chai.request(server)
         .put('/api/v1/zipcode/1')
         .end((err, response) => {
@@ -567,7 +567,7 @@ describe('API Routes', () => {
         });
     });
 
-    it(':( must have authorization to post', (done) => {
+    it(':( must have authorization to put', (done) => {
       chai.request(server)
         .put('/api/v1/zipcode/1')
         .set('Authorization', 'this should not work')
