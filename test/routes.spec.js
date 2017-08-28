@@ -634,12 +634,24 @@ describe('API Routes', () => {
 
   describe('DELETE /v1/:regionType/:id', () => {
     // LINDSAY
-    it.skip(':) should delete a single entry in a region table', (done) => {
+    it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .end((err, response) => {
-          // test all the things!
-          done();
+          response.should.have.status(200);
+          response.should.be.json;
+
+          chai.request(server)
+            .get('/api/v1/neighborhood?name=Upper+West+Side')
+            .end((err, response) => {
+              response.should.have.status(200);
+              response.should.be.json;
+              console.log(response.body.err);
+              response.body.should.have.property('err');
+              response.body.err.should.equal('No matching entries');
+              done();
+            });
         });
     });
 
