@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
@@ -9,7 +11,6 @@ const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
 
 const adminToken = process.env.ADMIN_TOKEN;
-const badToken = process.env.BAD_TOKEN;
 
 chai.use(chaiHttp);
 
@@ -26,7 +27,6 @@ describe('API Routes', () => {
 
   describe('GET /v1/:regionType', () => {
     it(':) should return all entries for specified region type', (done) => {
-      // GEORGE
       chai.request(server)
         .get('/api/v1/state')
         .end((err, response) => {
@@ -71,7 +71,6 @@ describe('API Routes', () => {
     });
 
     it(':) should return filtered entries for region type with provided query parameters', (done) => {
-      // LINDSAY
       chai.request(server)
         .get('/api/v1/city?state=NY')
         .end((err, response) => {
@@ -103,20 +102,18 @@ describe('API Routes', () => {
     });
 
     it(':) should return no entries if the provided query parameters do not match any records', (done) => {
-      // LINDSAY
       chai.request(server)
         .get('/api/v1/city?state=XX')
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
-          response.body.should.be.a('array');
-          response.body.length.should.equal(0);
+          response.body.should.be.a('object');
+          response.body.err.should.equal('No matching entries');
           done();
         });
     });
 
     it(':( should return an error message for unprocessable region types', (done) => {
-      // GEORGE
       chai.request(server)
         .get('/api/v1/country')
         .end((err, response) => {
@@ -340,7 +337,6 @@ describe('API Routes', () => {
   });
 
   describe('PUT /v1/:regionType', () => {
-    // LINDSAY
     it(':) should update all matching provided entries in the associated region table', (done) => {
       const updates = {
         data: [
@@ -359,7 +355,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -408,38 +404,38 @@ describe('API Routes', () => {
 
           chai.request(server)
             .get('/api/v1/neighborhood?name=East+New+York')
-            .end((err, response) => {
-              response.should.have.status(200);
-              response.should.be.json;
-              response.body.should.be.a('array');
-              response.body[0].should.have.property('id');
-              response.body[0].should.have.property('name');
-              response.body[0].should.have.property('metro_id');
-              response.body[0].should.have.property('state_id');
-              response.body[0].should.have.property('city_id');
-              response.body[0].should.have.property('collected_on');
-              response.body[0].should.have.property('median_rent');
-              response.body[0].should.have.property('monthly_change');
-              response.body[0].should.have.property('quarterly_change');
-              response.body[0].should.have.property('yearly_change');
-              response.body[0].should.have.property('size_rank');
-              response.body[0].should.have.property('state');
-              response.body[0].should.have.property('metro');
-              response.body[0].should.have.property('county');
-              response.body[0].should.have.property('city');
-              response.body[0].should.have.property('created_at');
-              response.body[0].should.have.property('updated_at');
-              response.body[0].id.should.equal(4);
-              response.body[0].name.should.equal('East New York');
-              response.body[0].metro_id.should.equal(1);
-              response.body[0].state_id.should.equal(3);
-              response.body[0].city_id.should.equal(1);
-              response.body[0].median_rent.should.equal(2217);
-              response.body[0].size_rank.should.equal(8);
-              response.body[0].state.should.equal('NY');
-              response.body[0].metro.should.equal('New York');
-              response.body[0].county.should.equal('Kings');
-              response.body[0].city.should.equal('New York');
+            .end((err2, response2) => {
+              response2.should.have.status(200);
+              response2.should.be.json;
+              response2.body.should.be.a('array');
+              response2.body[0].should.have.property('id');
+              response2.body[0].should.have.property('name');
+              response2.body[0].should.have.property('metro_id');
+              response2.body[0].should.have.property('state_id');
+              response2.body[0].should.have.property('city_id');
+              response2.body[0].should.have.property('collected_on');
+              response2.body[0].should.have.property('median_rent');
+              response2.body[0].should.have.property('monthly_change');
+              response2.body[0].should.have.property('quarterly_change');
+              response2.body[0].should.have.property('yearly_change');
+              response2.body[0].should.have.property('size_rank');
+              response2.body[0].should.have.property('state');
+              response2.body[0].should.have.property('metro');
+              response2.body[0].should.have.property('county');
+              response2.body[0].should.have.property('city');
+              response2.body[0].should.have.property('created_at');
+              response2.body[0].should.have.property('updated_at');
+              response2.body[0].id.should.equal(4);
+              response2.body[0].name.should.equal('East New York');
+              response2.body[0].metro_id.should.equal(1);
+              response2.body[0].state_id.should.equal(3);
+              response2.body[0].city_id.should.equal(1);
+              response2.body[0].median_rent.should.equal(2217);
+              response2.body[0].size_rank.should.equal(8);
+              response2.body[0].state.should.equal('NY');
+              response2.body[0].metro.should.equal('New York');
+              response2.body[0].county.should.equal('Kings');
+              response2.body[0].city.should.equal('New York');
               done();
             });
         });
@@ -463,7 +459,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(404);
@@ -495,7 +491,6 @@ describe('API Routes', () => {
   });
 
   describe('PUT /v1/:regionType/:id', () => {
-    // LINDSAY
     it(':) should update single matching entry in region table', (done) => {
       const update = {
         median_rent: 2999,
@@ -503,7 +498,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -513,35 +508,35 @@ describe('API Routes', () => {
           response.body.result.should.equal(1);
           chai.request(server)
             .get('/api/v1/neighborhood?name=Upper+West+Side')
-            .end((err, response) => {
-              response.body[0].should.have.property('id');
-              response.body[0].should.have.property('name');
-              response.body[0].should.have.property('metro_id');
-              response.body[0].should.have.property('state_id');
-              response.body[0].should.have.property('city_id');
-              response.body[0].should.have.property('collected_on');
-              response.body[0].should.have.property('median_rent');
-              response.body[0].should.have.property('monthly_change');
-              response.body[0].should.have.property('quarterly_change');
-              response.body[0].should.have.property('yearly_change');
-              response.body[0].should.have.property('size_rank');
-              response.body[0].should.have.property('state');
-              response.body[0].should.have.property('metro');
-              response.body[0].should.have.property('county');
-              response.body[0].should.have.property('city');
-              response.body[0].should.have.property('created_at');
-              response.body[0].should.have.property('updated_at');
-              response.body[0].id.should.equal(1);
-              response.body[0].name.should.equal('Upper West Side');
-              response.body[0].metro_id.should.equal(1);
-              response.body[0].state_id.should.equal(3);
-              response.body[0].city_id.should.equal(1);
-              response.body[0].median_rent.should.equal(2999);
-              response.body[0].size_rank.should.equal(2);
-              response.body[0].state.should.equal('NY');
-              response.body[0].metro.should.equal('New York');
-              response.body[0].county.should.equal('New York');
-              response.body[0].city.should.equal('New York');
+            .end((err2, response2) => {
+              response2.body[0].should.have.property('id');
+              response2.body[0].should.have.property('name');
+              response2.body[0].should.have.property('metro_id');
+              response2.body[0].should.have.property('state_id');
+              response2.body[0].should.have.property('city_id');
+              response2.body[0].should.have.property('collected_on');
+              response2.body[0].should.have.property('median_rent');
+              response2.body[0].should.have.property('monthly_change');
+              response2.body[0].should.have.property('quarterly_change');
+              response2.body[0].should.have.property('yearly_change');
+              response2.body[0].should.have.property('size_rank');
+              response2.body[0].should.have.property('state');
+              response2.body[0].should.have.property('metro');
+              response2.body[0].should.have.property('county');
+              response2.body[0].should.have.property('city');
+              response2.body[0].should.have.property('created_at');
+              response2.body[0].should.have.property('updated_at');
+              response2.body[0].id.should.equal(1);
+              response2.body[0].name.should.equal('Upper West Side');
+              response2.body[0].metro_id.should.equal(1);
+              response2.body[0].state_id.should.equal(3);
+              response2.body[0].city_id.should.equal(1);
+              response2.body[0].median_rent.should.equal(2999);
+              response2.body[0].size_rank.should.equal(2);
+              response2.body[0].state.should.equal('NY');
+              response2.body[0].metro.should.equal('New York');
+              response2.body[0].county.should.equal('New York');
+              response2.body[0].city.should.equal('New York');
               done();
             });
         });
@@ -555,7 +550,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(badUpdate)
         .end((err, response) => {
           response.body.err.code.should.equal('42703');
@@ -636,21 +631,20 @@ describe('API Routes', () => {
   });
 
   describe('DELETE /v1/:regionType/:id', () => {
-    // LINDSAY
     it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
 
           chai.request(server)
             .get('/api/v1/neighborhood?name=Upper+West+Side')
-            .end((err, response) => {
-              response.should.have.status(200);
-              response.should.be.json;
-              response.body.length.should.equal(0);
+            .end((error, response2) => {
+              response2.should.have.status(200);
+              response2.should.be.json;
+              response2.body.err.should.equal('No matching entries');
               done();
             });
         });
@@ -659,7 +653,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/metro/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
