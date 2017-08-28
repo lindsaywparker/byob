@@ -10,7 +10,8 @@ const environment = process.env.NODE_ENV || 'test';
 const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
 
-const adminToken2 = process.env.ADMIN_TOKEN;
+const adminToken = process.env.ADMIN_TOKEN;
+const adminToken2 = process.env.ADMIN_TOKEN2;
 
 chai.use(chaiHttp);
 
@@ -147,7 +148,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
