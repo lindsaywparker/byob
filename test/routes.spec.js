@@ -9,7 +9,6 @@ const configuration = require('../knexfile')[environment];
 const knex = require('knex')(configuration);
 
 const adminToken = process.env.ADMIN_TOKEN;
-const badToken = process.env.BAD_TOKEN;
 
 chai.use(chaiHttp);
 
@@ -101,14 +100,13 @@ describe('API Routes', () => {
     });
 
     it(':) should return no entries if the provided query parameters do not match any records', (done) => {
-      // LINDSAY
       chai.request(server)
         .get('/api/v1/city?state=XX')
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
-          response.body.should.be.a('array');
-          response.body.length.should.equal(0);
+          response.body.should.be.a('object');
+          response.body.err.should.equal('No matching entries');
           done();
         });
     });
@@ -147,7 +145,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -217,7 +215,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(newNeighb)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -337,7 +335,6 @@ describe('API Routes', () => {
   });
 
   describe('PUT /v1/:regionType', () => {
-    // LINDSAY
     it(':) should update all matching provided entries in the associated region table', (done) => {
       const updates = {
         data: [
@@ -356,7 +353,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -460,7 +457,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(404);
@@ -492,7 +489,6 @@ describe('API Routes', () => {
   });
 
   describe('PUT /v1/:regionType/:id', () => {
-    // LINDSAY
     it(':) should update single matching entry in region table', (done) => {
       const update = {
         median_rent: 2999,
@@ -500,7 +496,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
@@ -552,7 +548,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .send(badUpdate)
         .end((err, response) => {
           response.body.err.code.should.equal('42703');
@@ -633,21 +629,20 @@ describe('API Routes', () => {
   });
 
   describe('DELETE /v1/:regionType/:id', () => {
-    // LINDSAY
     it(':) should delete a single entry in a region table', (done) => {
       chai.request(server)
         .delete('/api/v1/neighborhood/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
 
           chai.request(server)
             .get('/api/v1/neighborhood?name=Upper+West+Side')
-            .end((err, response) => {
-              response.should.have.status(200);
-              response.should.be.json;
-              response.body.length.should.equal(0);
+            .end((error, response2) => {
+              response2.should.have.status(200);
+              response2.should.be.json;
+              response2.body.err.should.equal('No matching entries');
               done();
             });
         });
@@ -656,7 +651,7 @@ describe('API Routes', () => {
     it(':( should return a clear error message if entry is unprocessable', (done) => {
       chai.request(server)
         .delete('/api/v1/metro/1')
-        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .set('Authorization', adminToken)
         .end((err, response) => {
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
