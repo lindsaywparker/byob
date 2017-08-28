@@ -1,9 +1,7 @@
 ## Build Your Own Backend (BYOB) - A Turing Mod 4 FEE Project
 
-### Synopsis - GEORGE
-This API follows CRUD design using the Zillow Zri data for rental markets in the United States, from the state level down to the local level, separated by either neighborhood name or zipcode.
-
-Design inspiration came from [@ToshTak](https://dribbble.com/ToshTak) on [Dribble](https://dribbble.com/shots/2040722-Engage-Prague-2015/attachments/362802). -->
+### Synopsis
+This API follows CRUD design using the Zillow Zri data for rental markets in the United States, from the state level down to the local level at which point locations are separated by either neighborhood name or zipcode.
 
 ### See It Live
 [BYOB](https://lwp-byob.herokuapp.com) on Heroku
@@ -267,23 +265,47 @@ Run with `npm test`
     ```
 ---
 
-##### `PUT` /api/v1/:regionType/:id - GEORGE
-  - **Description:** type the things here?
+##### `PUT` /api/v1/:regionType/:id
+  - **Description:** Update the information for a single location
   - **Parameters**
-    - type the things here?
-    - type the things here?
+    - **regionType:** The table you wish to modify
+    - **id:** the id of the item you wish to change
+    - **[OPTIONS]**
+    - name (must be unique)
+    - collected_on
+    - median_rent
+    - monthly_change
+    - quarterly_change
+    - yearly_change
+    - size_rank (must be unique)
+    - state (all except state table)
+    - abbr (state table only)
+    - metro (city, neighborhood, zipcode tables only)
+    - county (city, neighborhood, zipcode tables only)
+    - city (neighborhood, zipcode tables only)
   - **Return Format:** A JSON object
   - **Errors**
-    - type the things here?
+    - **404 Table Not Found:** The region type provided does not exist, confirm intended path.
+    - **500 Server Error:** There was an error modifying the requested records, try again.
+    - **You must be authorized to hit the endpoint:** JSON web token was either not applied or invalid
   - **Example**
     - **Request**
     ```javascript
-    console.log('hi im code');
+    PUT '/api/v1/metro/23'
+    Body:
+    {     
+        "median_rent": 9999,
+        "monthly_change": "11.59",
+        "quarterly_change": "0.00",
+        "yearly_change": "999.33"
+    }
+    Authorization: 'some-valid-token'
     ```
     - **Return**
     ```javascript
     {
-      console.log('hi im code');
+    "msg": "1 record(s) successfully updated",
+    "result": 1
     }
     ```
   
