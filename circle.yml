@@ -8,6 +8,7 @@ machine:
 
 test:
   override:
+    - npm run lint
     - npm run test
     
 deployment:
