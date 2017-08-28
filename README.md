@@ -1,9 +1,7 @@
 ## Build Your Own Backend (BYOB) - A Turing Mod 4 FEE Project
 
-### Synopsis - GEORGE
-<!-- This project converts user-provided long URLs and converts them to short URLs while saving them to a selected folder.  It is built on the front-end with jQuery and the back-end with Node/Express, knex, and PostgreSQL.
-
-Design inspiration came from [@ToshTak](https://dribbble.com/ToshTak) on [Dribble](https://dribbble.com/shots/2040722-Engage-Prague-2015/attachments/362802). -->
+### Synopsis
+This API follows CRUD design using the Zillow Zri data for rental markets in the United States, from the state level down to the local level at which point locations are separated by either neighborhood name or zipcode.
 
 ### See It Live
 [BYOB](https://lwp-byob.herokuapp.com) on Heroku
@@ -21,9 +19,9 @@ BYOB uses Mocha and Chai for testing
 
 Run with `npm test`
 
-### Original Assignment - GEORGE
+### Original Assignment
 
-<!-- [Jet Fuel](http://frontend.turing.io/projects/jet-fuel.html) from the Turing School of Software & Design -->
+[BYOB](http://frontend.turing.io/projects/build-your-own-backend.html)
 
 ### Documentation
 #### Region Types
@@ -106,23 +104,80 @@ Run with `npm test`
     ```
 ---
 
-##### `POST` /api/v1/:regionType - GEORGE
-  - **Description:** type the things here?
-  - **Parameters**
-    - type the things here?
-    - type the things here?
+##### `POST` /api/v1/:regionType
+  - **Description:** Add a single location to the specified table
+  - **Parameters:** Region type to modify (only neighborhood and zipcode currently available)
+  - **Request body must contain:**
+    - name
+    - collected_on
+    - median_rent
+    - monthly_change
+    - quarterly_change
+    - yearly_change
+    - size_rank
+    - state (all except state table)
+    - abbr (state table only)
+    - metro (city, neighborhood, zipcode tables only)
+    - county (city, neighborhood, zipcode tables only)
+    - city (neighborhood, zipcode tables only)
+  - **Authorization**
+    - JWT with admin rights required
   - **Return Format:** A JSON object
   - **Errors**
-    - type the things here?
+    - **404 Table Not Found:** The region type provided does not exist, confirm intended path.
+    - **500 Server Error:** There was an error modifying the requested records, try again.
+    - **23502 Database error:** Missing required parameters
+    - **Unacceptable POST target:** Attempted to POST to a table outside of those allowed
+    - **You must be authorized to hit the endpoint:** JSON web token was either not applied or invalid
   - **Example**
     - **Request**
     ```javascript
-    console.log('hi im code');
+    POST '/api/v1/:regionType'
+    body: 
+    {
+        name: 'Ping pong',
+        metro_id: 43,
+        state_id: 767,
+        city_id: 13,
+        collected_on: '2017-06-30T06:00:00.000Z',
+        median_rent: 1736,
+        monthly_change: '0.00',
+        quarterly_change: '0.00',
+        yearly_change: '0.01',
+        size_rank: 83,
+        created_at: '2017-08-22T22:38:13.668Z',
+        updated_at: '2017-08-22T22:38:13.668Z',
+        state: 'TX',
+        metro: 'Dallas-Fort Worth',
+        county: 'Dallas',
+        city: 'Dallas'
+    }
+    Authorization: 'some-valid-token'
     ```
     - **Return**
     ```javascript
     {
-      console.log('hi im code');
+    "result": [
+        {
+            "id": 10,
+            "name": "Ping pong",
+            "metro_id": 43,
+            "state_id": 767,
+            "city_id": 13,
+            "collected_on": "2017-06-30T06:00:00.000Z",
+            "median_rent": 1736,
+            "monthly_change": "0.00",
+            "quarterly_change": "0.00",
+            "yearly_change": "0.01",
+            "size_rank": 83,
+            "created_at": "2017-08-22T22:38:13.668Z",
+            "updated_at": "2017-08-22T22:38:13.668Z",
+            "state": "TX",
+            "metro": "Dallas-Fort Worth",
+            "county": "Dallas",
+            "city": "Dallas"
+        }
+      ]
     }
     ```
   
@@ -210,23 +265,47 @@ Run with `npm test`
     ```
 ---
 
-##### `PUT` /api/v1/:regionType/:id - GEORGE
-  - **Description:** type the things here?
+##### `PUT` /api/v1/:regionType/:id
+  - **Description:** Update the information for a single location
   - **Parameters**
-    - type the things here?
-    - type the things here?
+    - **regionType:** The table you wish to modify
+    - **id:** the id of the item you wish to change
+    - **[OPTIONS]**
+    - name (must be unique)
+    - collected_on
+    - median_rent
+    - monthly_change
+    - quarterly_change
+    - yearly_change
+    - size_rank (must be unique)
+    - state (all except state table)
+    - abbr (state table only)
+    - metro (city, neighborhood, zipcode tables only)
+    - county (city, neighborhood, zipcode tables only)
+    - city (neighborhood, zipcode tables only)
   - **Return Format:** A JSON object
   - **Errors**
-    - type the things here?
+    - **404 Table Not Found:** The region type provided does not exist, confirm intended path.
+    - **500 Server Error:** There was an error modifying the requested records, try again.
+    - **You must be authorized to hit the endpoint:** JSON web token was either not applied or invalid
   - **Example**
     - **Request**
     ```javascript
-    console.log('hi im code');
+    PUT '/api/v1/metro/23'
+    Body:
+    {     
+        "median_rent": 9999,
+        "monthly_change": "11.59",
+        "quarterly_change": "0.00",
+        "yearly_change": "999.33"
+    }
+    Authorization: 'some-valid-token'
     ```
     - **Return**
     ```javascript
     {
-      console.log('hi im code');
+    "msg": "1 record(s) successfully updated",
+    "result": 1
     }
     ```
   

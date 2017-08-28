@@ -19,6 +19,9 @@ const getRegionData = (request, response) => {
       }
     })
     .then((data) => {
+      if (data.length === 0) {
+        return response.status(200).json({ err: 'No matching entries' });
+      }
       response.status(200).json(data);
     })
     .catch((err) => {
@@ -84,7 +87,7 @@ const updateSpecificRegionData = (request, response) => {
 
   db(regionType).where('id', id).update(updates)
     .then((result) => {
-      response.status(200).json({ result });
+      response.status(200).json({ msg: `${result} record(s) successfully updated`, result });
     })
     .catch((err) => {
       if (err.code === '42P01') {
@@ -114,6 +117,9 @@ const deleteRegionData = (request, response) => {
 const deleteSpecificRegionData = (request, response) => {
   db(request.params.regionType).where('id', request.params.id).del()
     .then((result) => {
+      if (result === 0) {
+        return response.status(200).json({ err: 'No matching entry to delete' });
+      }
       response.status(200).json(result);
     })
     .catch((err) => {
@@ -139,7 +145,7 @@ const generateJWT = (request, response) => {
   }
 
   const token = jwt.sign(payload, privateKey);
-  response.status(200).json({ msg: 'Request successful, see token below', token });
+  response.status(200).json({ msg: 'Request successful, use token below', token });
 };
 
 module.exports = {
