@@ -658,30 +658,29 @@ describe('API Routes', () => {
         .delete('/api/v1/metro/1')
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .end((err, response) => {
-          console.log(response.body.err);
           response.body.err.code.should.equal('23503');
           response.body.err.should.have.property('detail');
           done();
         });
     });
 
-    // it(':( must have authorization to delete', (done) => {
-    //   chai.request(server)
-    //     .delete('/api/v1/zipcode/1')
-    //     .end((err, response) => {
-    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
-    //       done();
-    //     });
-    // });
-    // 
-    // it(':( must have authorization to delete', (done) => {
-    //   chai.request(server)
-    //     .delete('/api/v1/zipcode/1')
-    //     .set('Authorization', 'this should not work')
-    //     .end((err, response) => {
-    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
-    //       done();
-    //     });
-    // });
+    it(':( must have authorization to delete', (done) => {
+      chai.request(server)
+        .delete('/api/v1/zipcode/1')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
+
+    it(':( must have authorization to delete', (done) => {
+      chai.request(server)
+        .delete('/api/v1/zipcode/1')
+        .set('Authorization', 'this should not work')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
   });
 });
