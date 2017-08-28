@@ -400,6 +400,7 @@ describe('API Routes', () => {
         .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
         .send(badUpdate)
         .end((err, response) => {
+          console.log(response.body.err);
           response.body.err.should.equal('Unacceptable POST target');
           done();
         });
