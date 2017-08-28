@@ -148,7 +148,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/zipcode')
-        .set('Authorization', adminToken)
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IjJnZ0B0dXJpbmcuaW8iLCJhcHBOYW1lIjoiTHVuYURlcmciLCJhZG1pbiI6dHJ1ZSwiaWF0IjoxNTAzODg5NDI3fQ.ko9ghwcNHn9lqo2nsUF81uVxRDMixiC1ZTZSYfMlw58')
         .send(newZip)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -218,7 +218,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(newNeighb)
         .end((err, response) => {
           response.status.should.equal(201);
@@ -280,7 +280,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/neighborhood')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(newNeighb)
         .end((err, response) => {
           response.body.err.code.should.equal('23502');
@@ -309,7 +309,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .post('/api/v1/state')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(newZip)
         .end((err, response) => {
           response.body.err.should.equal('Unacceptable POST target');
@@ -356,7 +356,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhood')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(200);
@@ -460,7 +460,7 @@ describe('API Routes', () => {
 
       chai.request(server)
         .put('/api/v1/neighborhoods')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(updates)
         .end((err, response) => {
           response.should.have.status(404);
@@ -499,7 +499,7 @@ describe('API Routes', () => {
       };
       chai.request(server)
         .put('/api/v1/neighborhood/1')
-        .set('Authorization', adminToken2)
+        .set('Authorization', adminToken)
         .send(update)
         .end((err, response) => {
           response.should.have.status(200);
