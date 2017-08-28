@@ -442,14 +442,54 @@ describe('API Routes', () => {
         });
     });
 
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
+    it(':( should return a clear error message if entry is unprocessable', (done) => {
+      const updates = {
+        data: [
+          {
+            name: 'West Side',
+            median_rent: 3999,
+            size_rank: 2,
+          },
+          {
+            name: 'Sherman Maples',
+            median_rent: 3499,
+            size_rank: 5,
+          },
+        ],
+      };
+
       chai.request(server)
-        .put('/api/v1/neighborhood/1')
+        .put('/api/v1/neighborhoods')
+        .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdnQHR1cmluZy5pbyIsImFwcE5hbWUiOiJzaWxseSBiZXRzIiwiYWRtaW4iOnRydWUsImlhdCI6MTUwMzg2MDI3MX0.fj1nrVab5HRe1_YFHL9zVWZ80rR8Hvi358G-c9yo56c')
+        .send(updates)
         .end((err, response) => {
-          // test all the things!
+          response.should.have.status(404);
+          response.should.be.json;
+          console.log(response.body.err);
+          response.body.should.be.a('object');
+          response.body.err.should.equal('Table not found');
           done();
         });
     });
+
+    // it(':( must have authorization to post', (done) => {
+    //   chai.request(server)
+    //     .put('/api/v1/zipcode')
+    //     .end((err, response) => {
+    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
+    //       done();
+    //     });
+    // });
+    // 
+    // it(':( must have authorization to post', (done) => {
+    //   chai.request(server)
+    //     .put('/api/v1/zipcode')
+    //     .set('Authorization', 'this should not work')
+    //     .end((err, response) => {
+    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
+    //       done();
+    //     });
+    // });
   });
 
   describe('PUT /v1/:regionType/:id', () => {
@@ -523,7 +563,7 @@ describe('API Routes', () => {
 
     it(':( must have authorization to post', (done) => {
       chai.request(server)
-        .put('/api/v1/zipcode')
+        .put('/api/v1/zipcode/1')
         .end((err, response) => {
           response.body.err.should.equal('You must be authorized to hit this endpoint');
           done();
@@ -532,7 +572,7 @@ describe('API Routes', () => {
 
     it(':( must have authorization to post', (done) => {
       chai.request(server)
-        .put('/api/v1/zipcode')
+        .put('/api/v1/zipcode/1')
         .set('Authorization', 'this should not work')
         .end((err, response) => {
           response.body.err.should.equal('You must be authorized to hit this endpoint');
