@@ -338,6 +338,122 @@ describe('API Routes', () => {
 
   describe('PUT /v1/:regionType', () => {
     // LINDSAY
+    it(':) should update all matching provided entries in the associated region table', (done) => {
+      const updates = {
+        data: [
+          {
+            name: 'Upper West Side',
+            median_rent: 3999,
+            size_rank: 2,
+          },
+          {
+            name: 'Sherman Oaks',
+            median_rent: 3499,
+            size_rank: 5,
+          },
+        ],
+      };
+
+      chai.request(server)
+        .put('/api/v1/neighborhood')
+        .set('Authorization', adminToken)
+        .send(updates)
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.results[0].should.be.a('array');
+          response.body.results[0][0].should.be.a('object');
+          response.body.results[0][0].should.have.property('id');
+          response.body.results[0][0].should.have.property('name');
+          response.body.results[0][0].should.have.property('metro_id');
+          response.body.results[0][0].should.have.property('state_id');
+          response.body.results[0][0].should.have.property('city_id');
+          response.body.results[0][0].should.have.property('collected_on');
+          response.body.results[0][0].should.have.property('median_rent');
+          response.body.results[0][0].should.have.property('monthly_change');
+          response.body.results[0][0].should.have.property('quarterly_change');
+          response.body.results[0][0].should.have.property('yearly_change');
+          response.body.results[0][0].should.have.property('size_rank');
+          response.body.results[0][0].should.have.property('state');
+          response.body.results[0][0].should.have.property('metro');
+          response.body.results[0][0].should.have.property('county');
+          response.body.results[0][0].should.have.property('city');
+          response.body.results[0][0].should.have.property('created_at');
+          response.body.results[0][0].should.have.property('updated_at');
+          response.body.results[0][0].id.should.equal(1);
+          response.body.results[0][0].name.should.equal('Upper West Side');
+          response.body.results[0][0].metro_id.should.equal(1);
+          response.body.results[0][0].state_id.should.equal(3);
+          response.body.results[0][0].city_id.should.equal(1);
+          response.body.results[0][0].median_rent.should.equal(3999);
+          response.body.results[0][0].size_rank.should.equal(2);
+          response.body.results[0][0].state.should.equal('NY');
+          response.body.results[0][0].metro.should.equal('New York');
+          response.body.results[0][0].county.should.equal('New York');
+          response.body.results[0][0].city.should.equal('New York');
+          response.body.results[2][0].id.should.equal(3);
+          response.body.results[2][0].name.should.equal('Sherman Oaks');
+          response.body.results[2][0].metro_id.should.equal(2);
+          response.body.results[2][0].state_id.should.equal(1);
+          response.body.results[2][0].city_id.should.equal(2);
+          response.body.results[2][0].median_rent.should.equal(3499);
+          response.body.results[2][0].size_rank.should.equal(5);
+          response.body.results[2][0].state.should.equal('CA');
+          response.body.results[2][0].metro.should.equal('Los Angeles-Long Beach-Anaheim');
+          response.body.results[2][0].county.should.equal('Los Angeles');
+          response.body.results[2][0].city.should.equal('Los Angeles');
+
+          chai.request(server)
+            .get('/api/v1/neighborhood?name=East+New+York')
+            .end((err, response) => {
+              response.should.have.status(200);
+              response.should.be.json;
+              response.body.should.be.a('array');
+              response.body[0].should.have.property('id');
+              response.body[0].should.have.property('name');
+              response.body[0].should.have.property('metro_id');
+              response.body[0].should.have.property('state_id');
+              response.body[0].should.have.property('city_id');
+              response.body[0].should.have.property('collected_on');
+              response.body[0].should.have.property('median_rent');
+              response.body[0].should.have.property('monthly_change');
+              response.body[0].should.have.property('quarterly_change');
+              response.body[0].should.have.property('yearly_change');
+              response.body[0].should.have.property('size_rank');
+              response.body[0].should.have.property('state');
+              response.body[0].should.have.property('metro');
+              response.body[0].should.have.property('county');
+              response.body[0].should.have.property('city');
+              response.body[0].should.have.property('created_at');
+              response.body[0].should.have.property('updated_at');
+              response.body[0].id.should.equal(4);
+              response.body[0].name.should.equal('East New York');
+              response.body[0].metro_id.should.equal(1);
+              response.body[0].state_id.should.equal(3);
+              response.body[0].city_id.should.equal(1);
+              response.body[0].median_rent.should.equal(2217);
+              response.body[0].size_rank.should.equal(8);
+              response.body[0].state.should.equal('NY');
+              response.body[0].metro.should.equal('New York');
+              response.body[0].county.should.equal('Kings');
+              response.body[0].city.should.equal('New York');
+              done();
+            });
+        });
+    });
+
+    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
+      chai.request(server)
+        .put('/api/v1/neighborhood/1')
+        .end((err, response) => {
+          // test all the things!
+          done();
+        });
+    });
+  });
+
+  describe('PUT /v1/:regionType/:id', () => {
+    // LINDSAY
     it(':) should update single matching entry in region table', (done) => {
       const update = {
         median_rent: 2999,
@@ -420,28 +536,6 @@ describe('API Routes', () => {
         .set('Authorization', 'this should not work')
         .end((err, response) => {
           response.body.err.should.equal('You must be authorized to hit this endpoint');
-          done();
-        });
-    });
-  });
-
-  describe('PUT /v1/:regionType/:id', () => {
-    // LINDSAY
-    it.skip(':) should update single matching entry in region table', (done) => {
-      chai.request(server)
-        .put('/api/v1/neighborhood/1')
-        .end((err, response) => {
-          // test all the things!
-          // mayyyyyy....require hardcoding ids.
-          done();
-        });
-    });
-
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
-      chai.request(server)
-        .put('/api/v1/neighborhood/1')
-        .end((err, response) => {
-          // test all the things!
           done();
         });
     });
