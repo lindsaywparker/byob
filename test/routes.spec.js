@@ -107,7 +107,7 @@ describe('API Routes', () => {
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
-          response.body.err.should.equal('No matching entries');
+          response.body.err.length.should.equal(0);
           done();
         });
     });
