@@ -405,24 +405,24 @@ describe('API Routes', () => {
         });
     });
 
-    // it(':( must have authorization to post', (done) => {
-    //   chai.request(server)
-    //     .post('/api/v1/zipcode')
-    //     .end((err, response) => {
-    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
-    //       done();
-    //     });
-    // });
-    // 
-    // it(':( must have authorization to post', (done) => {
-    //   chai.request(server)
-    //     .post('/api/v1/zipcode')
-    //     .set('Authorization', 'this should not work')
-    //     .end((err, response) => {
-    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
-    //       done();
-    //     });
-    // });
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
+
+    it(':( must have authorization to post', (done) => {
+      chai.request(server)
+        .put('/api/v1/zipcode')
+        .set('Authorization', 'this should not work')
+        .end((err, response) => {
+          response.body.err.should.equal('You must be authorized to hit this endpoint');
+          done();
+        });
+    });
   });
 
   describe('PUT /v1/:regionType/:id', () => {
