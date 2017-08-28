@@ -106,7 +106,7 @@ describe('API Routes', () => {
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
-          response.body.should.be.a('object');
+          response.body.should.be.a('array');
           response.body.err.should.equal('No matching entries');
           done();
         });
