@@ -647,21 +647,43 @@ describe('API Routes', () => {
             .end((err, response) => {
               response.should.have.status(200);
               response.should.be.json;
-              console.log(response.body.err);
-              response.body.should.have.property('err');
-              response.body.err.should.equal('No matching entries');
+              console.log(response.body);
+              response.body.length.should.equal(0);
               done();
             });
         });
     });
 
-    it.skip(':( should return a clear error message if entry is unprocessable', (done) => {
-      chai.request(server)
-        .delete('/api/v1/neighborhood/100')
-        .end((err, response) => {
-          // test all the things!
-          done();
-        });
-    });
+    // it(':( should return a clear error message if entry is unprocessable', (done) => {
+    //   chai.request(server)
+    //     .delete('/api/v1/neighborhood/100')
+    //     .set('Authorization', adminToken)
+    //     .end((err, response) => {
+    //       response.should.have.status(200);
+    //       response.should.be.json;
+    //       response.body.should.have.property('err');
+    //       response.body.err.should.equal('No matching entry to delete');
+    //       done();
+    //     });
+    // });
+    // 
+    // it(':( must have authorization to delete', (done) => {
+    //   chai.request(server)
+    //     .delete('/api/v1/zipcode/1')
+    //     .end((err, response) => {
+    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
+    //       done();
+    //     });
+    // });
+    // 
+    // it(':( must have authorization to delete', (done) => {
+    //   chai.request(server)
+    //     .delete('/api/v1/zipcode/1')
+    //     .set('Authorization', 'this should not work')
+    //     .end((err, response) => {
+    //       response.body.err.should.equal('You must be authorized to hit this endpoint');
+    //       done();
+    //     });
+    // });
   });
 });
